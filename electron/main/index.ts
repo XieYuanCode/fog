@@ -17,16 +17,12 @@ let settingWindow: BrowserWindow | null = null //设置窗口
 let quickOpenWin: BrowserWindow | null = null //快速启动窗口
 
 
-console.log(process.env.PUBLIC);
-console.log(process.env.DIST);
-
 app.on("ready", () => {
   mainWindow = windowManager.createMainWindow(); //创建主窗口
-  // windowManager.manageWindows()
 })
 
 app.on('window-all-closed', () => {
-  windowManager.killMainWindow();
+  windowManager.killAllWindows();
   if (process.platform !== 'darwin') app.quit()
 })
 

@@ -33,10 +33,9 @@ class WindowManager {
       frame: process.platform === "win32",
       titleBarStyle: "hidden",
       titleBarOverlay: process.platform === "win32",
-      vibrancy: 'light',
+      vibrancy: 'selection',
       visualEffectState: "active",
       show: true,
-      transparent: true,
       webPreferences: {
         spellcheck: false,
         devTools: true
@@ -55,8 +54,7 @@ class WindowManager {
     return this.mainWindow;
   }
 
-  public killMainWindow() {
-    if (!this.mainWindow) return;
+  public killAllWindows() {
     this._mainWindowState.unmanage()
     this.mainWindow = null;
   }
