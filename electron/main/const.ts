@@ -1,0 +1,1 @@
+export const COPYRIGHY = "©2022-2023 XieYuan"; //版权信息
