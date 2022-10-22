@@ -1,8 +1,9 @@
 import { app, BrowserWindow, shell, ipcMain } from 'electron'
 import { join } from 'path'
-import { prePrepareForEnvironment, prePrepareForPlatform, setAboutPanelOptions } from './common'
+import { prePrepareForEnvironment, prePrepareForPlatform, setAboutPanelOptions, setAsDefaultProtocolClient } from './common'
 import store, { initRendererStore } from "./store";
 import windowManager from "./windowManager";
+import initAllEvents from "./events"
 
 prePrepareForPlatform(); //各个平台的适配工作
 prePrepareForEnvironment(); //准备环境变量
@@ -10,15 +11,27 @@ setAboutPanelOptions() //设置应用程序的"关于"面板选项
 
 initRendererStore(); // 初始化渲染进程Store
 
+initAllEvents(); //初始化所有进程间事件
+
 let mainWindow: BrowserWindow | null = null //主窗口
 let welcomeWindow: BrowserWindow | null = null //欢迎窗口
 let addServiceAccountWindow: BrowserWindow | null = null //添加服务账号窗口
 let settingWindow: BrowserWindow | null = null //设置窗口
 let quickOpenWin: BrowserWindow | null = null //快速启动窗口
 
+app.whenReady().then(() => {
+  setAsDefaultProtocolClient()
 
-app.on("ready", () => {
   mainWindow = windowManager.createMainWindow(); //创建主窗口
+  const isFirstLoad = store.get('isFirstLoad', true) //是否第一次加载应用
+
+  if(isFirstLoad) {
+    welcomeWindow = windowManager.createWelcomeWindow();
+    welcomeWindow.show();
+    welcomeWindow.webContents.openDevTools();
+  } else {
+    mainWindow.show();
+  }
 })
 
 app.on('window-all-closed', () => {

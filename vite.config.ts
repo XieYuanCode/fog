@@ -3,8 +3,8 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import electron from 'vite-electron-plugin'
 import { customStart } from 'vite-electron-plugin/plugin'
-import renderer from 'vite-plugin-electron-renderer'
 import pkg from './package.json'
+import { createStyleImportPlugin } from 'vite-plugin-style-import'
 
 rmSync('dist-electron', { recursive: true, force: true })
 
@@ -22,10 +22,15 @@ export default defineConfig({
         ? [customStart(debounce(() => console.log(/* For `.vscode/.debug.script.mjs` */'[startup] Electron App')))]
         : undefined,
     }),
-    // Use Node.js API in the Renderer-process
-    renderer({
-      nodeIntegration: true,
-    }),
+    createStyleImportPlugin({
+      libs: [{
+        libraryName: "@arco-design/web-vue",
+        esModule: true,
+        resolveStyle: (name) => { 
+          return `@arco-design/web-vue/es/${name}/style/css.js`
+        }
+      }]
+    })
   ],
   server: process.env.VSCODE_DEBUG ? (() => {
     const url = new URL(pkg.debug.env.VITE_DEV_SERVER_URL)

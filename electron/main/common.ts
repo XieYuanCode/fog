@@ -37,3 +37,7 @@ export const setAboutPanelOptions = () => {
     copyright: COPYRIGHY
   })
 }
+
+export const setAsDefaultProtocolClient = () => {
+  app.setAsDefaultProtocolClient('fog', process.execPath, [`${__dirname}`])
+}
