@@ -7,7 +7,7 @@
 <script setup lang="ts">
 import { Button } from "@arco-design/web-vue"
 const goToHome = () => {
-  fog_bridge.goToHome()
+  window_bridge.goToHome()
 }
 </script>
 

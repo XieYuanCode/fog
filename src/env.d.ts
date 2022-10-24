@@ -7,6 +7,6 @@ declare module '*.vue' {
   export default component
 }
 
-declare var fog_bridge: {
+declare var window_bridge: {
   goToHome: () => void
 }
