@@ -4,7 +4,6 @@ import vue from '@vitejs/plugin-vue'
 import electron from 'vite-electron-plugin'
 import { customStart } from 'vite-electron-plugin/plugin'
 import pkg from './package.json'
-import { createStyleImportPlugin } from 'vite-plugin-style-import'
 
 rmSync('dist-electron', { recursive: true, force: true })
 
@@ -21,15 +20,6 @@ export default defineConfig({
       plugins: process.env.VSCODE_DEBUG
         ? [customStart(debounce(() => console.log(/* For `.vscode/.debug.script.mjs` */'[startup] Electron App')))]
         : undefined,
-    }),
-    createStyleImportPlugin({
-      libs: [{
-        libraryName: "@arco-design/web-vue",
-        esModule: true,
-        resolveStyle: (name) => { 
-          return `@arco-design/web-vue/es/${name}/style/css.js`
-        }
-      }]
     })
   ],
   server: process.env.VSCODE_DEBUG ? (() => {
