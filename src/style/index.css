@@ -8,3 +8,31 @@
   width: 100vw;
   height: 100vh;
 }
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.arco-radio-button {
+  color: #fff!important;
+  background-color: rgb(var(--primary-6))!important
+}
+
+.arco-radio-button:hover {
+  color: #fff!important;
+  background-color: rgb(var(--primary-5))!important
+}
+
+.arco-radio-checked {
+  color: #fff!important;
+  background-color: rgb(var(--primary-4)) !important;
+}
+
+.arco-radio-group-button {
+  background-color: unset !important;
+}
+
+.arco-btn-size-mini {
+  height: 18px !important;
+}

@@ -9,6 +9,16 @@ rmSync('dist-electron', { recursive: true, force: true })
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  css: {
+    preprocessorOptions: {
+      less: {
+        modifyVars: {
+          'arcoblue-6': '#4E5969',
+        },
+        javascriptEnabled: true,
+      }
+    }
+  },
   plugins: [
     vue(),
     electron({

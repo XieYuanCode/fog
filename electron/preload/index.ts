@@ -17,3 +17,7 @@ contextBridge.exposeInMainWorld('git_bridge', {
   deleteLocalBranches: (repoID: string, branchNames: string[], forceDelete = false) => ipcRenderer.send('Git:Branch:DeleteLocalBranches', repoID, branchNames, forceDelete)
   //#endregion
 })
+
+contextBridge.exposeInMainWorld("common_bridge", {
+  getPath: (key: string) => ipcRenderer.sendSync("Common:GetPath", key)
+})
