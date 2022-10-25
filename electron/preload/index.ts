@@ -1,4 +1,5 @@
 import { contextBridge, ipcRenderer } from "electron";
+import type { OpenDialogSyncOptions } from "electron"
 
 contextBridge.exposeInMainWorld('window_bridge', {
   goToHome: () => ipcRenderer.send('Window:GoToHome')
@@ -19,5 +20,6 @@ contextBridge.exposeInMainWorld('git_bridge', {
 })
 
 contextBridge.exposeInMainWorld("common_bridge", {
-  getPath: (key: string) => ipcRenderer.sendSync("Common:GetPath", key)
+  getPath: (key: string) => ipcRenderer.sendSync("Common:GetPath", key),
+  showOpenDialogSync: (options: OpenDialogSyncOptions) => ipcRenderer.sendSync("Common:GetPath", options)
 })
