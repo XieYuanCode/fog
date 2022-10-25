@@ -21,5 +21,5 @@ contextBridge.exposeInMainWorld('git_bridge', {
 
 contextBridge.exposeInMainWorld("common_bridge", {
   getPath: (key: string) => ipcRenderer.sendSync("Common:GetPath", key),
-  showOpenDialogSync: (options: OpenDialogSyncOptions) => ipcRenderer.sendSync("Common:GetPath", options)
+  showOpenDialogSync: (options: OpenDialogSyncOptions) => ipcRenderer.sendSync("Common:showOpenDialogSync", options)
 })

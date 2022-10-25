@@ -63,7 +63,6 @@ class WindowManager {
   }
 
   public createWelcomeWindow(): BrowserWindow {
-    console.log(this._preloadFileAddress);
     this.welcomeWindow = new BrowserWindow({
       width: 1000,
       height: 600,

@@ -8,7 +8,7 @@
             Welcome
           </div>
           <div v-else-if="currentStep === 2" key="General" class="welcome-General absolute">
-            <FogForm :style="{ width: '600px' }" :label-col-props="{ span: 8, offset: 0 }"
+            <FogForm :model="preferenceStore" :style="{ width: '600px' }" :label-col-props="{ span: 8, offset: 0 }"
               :wrapper-col-props="{ span: 16, offset: 0 }">
               <FogFormItem field="default folder" :label="$t('welcome.general.default_cloned_directory_label')">
                 <FogButton type="primary" size="mini" @click="selectDefaultClonedDirectory">{{
@@ -64,11 +64,9 @@ import welcome_carousel_4 from "../../assets/welcome_carousel_4.jpg"
 import { useAppearanceStore } from "../../store/appearance"
 import { usePreferenceStore } from "../../store/preference"
 import { ThemeType } from "../../types/theme"
-import { useI18n } from "vue-i18n"
 
 const appearanceStore = useAppearanceStore()
 const preferenceStore = usePreferenceStore()
-const { t } = useI18n()
 const currentStep = ref(2)
 
 const carouselImages: string[] = [welcome_carousel_1, welcome_carousel_2, welcome_carousel_3, welcome_carousel_4]
@@ -78,11 +76,11 @@ const languageChanged = (language: 'en' | 'ch') => preferenceStore.setLanguage(l
 
 const selectDefaultClonedDirectory = () => {
   const selected = common_bridge.showOpenDialogSync({
-    title: t("dialog.select_default_cloned_directory"),
+    title: '123',
     properties: ["openDirectory", "createDirectory"]
-  })
+  }) as string[] | undefined
 
-  console.log(selected);
+  selected && preferenceStore.setDefaultCloneUrl(selected[0])
 }
 
 const nextStep = () => {
