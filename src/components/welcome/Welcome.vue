@@ -2,24 +2,26 @@
   <div class="welcome-view select-none h-full w-full">
     <div class="move-window-content h-6 w-full absolute top-0 left-0 "></div>
     <div class="welcome-view-main-container w-full h-full flex">
-      <div class="welcome-view-left-container w-4/6 h-full pt-8">
+      <div class="welcome-view-left-container w-4/6 h-full p-8 relative">
         <Transition name="fade">
+
           <div v-if="currentStep === 1" key="description" class="welcome-description absolute ">
-            Welcome
+            <FogTypographyTitle>Welcome Page</FogTypographyTitle>
           </div>
           <div v-else-if="currentStep === 2" key="General" class="welcome-General absolute">
-            <FogForm :model="preferenceStore" :style="{ width: '600px' }" :label-col-props="{ span: 8, offset: 0 }"
-              :wrapper-col-props="{ span: 16, offset: 0 }">
+            <FogTypographyTitle>{{ $t('welcome.general.general_setting_title') }}</FogTypographyTitle>
+            <FogForm :model="preferenceStore" :style="{ width: '600px', marginTop: '20px' }"
+              :label-col-props="{ span: 8, offset: 0 }" :wrapper-col-props="{ span: 14, offset: 0 }">
               <FogFormItem field="default folder" :label="$t('welcome.general.default_cloned_directory_label')">
                 <FogButton type="primary" size="mini" @click="selectDefaultClonedDirectory">{{
                     preferenceStore.defaultCloneUrl
                 }}</FogButton>
               </FogFormItem>
-              <FogFormItem field="theme" label="color theme" v-if="false">
+              <FogFormItem field="theme" :label="$t('welcome.general.color_theme_label')">
                 <FogRadioGroup type="button" size="mini" v-model="appearanceStore.theme" @change="themeChanged">
-                  <FogRadio value="Light" disabled>Light</FogRadio>
-                  <FogRadio value="Dark" disabled>Dark</FogRadio>
-                  <FogRadio value="System">System</FogRadio>
+                  <FogRadio value="Light">{{ $t('welcome.general.color_theme_light') }}</FogRadio>
+                  <FogRadio value="Dark">{{ $t('welcome.general.color_theme_dark') }}</FogRadio>
+                  <FogRadio value="System">{{ $t('welcome.general.color_theme_system') }}</FogRadio>
                 </FogRadioGroup>
               </FogFormItem>
               <FogFormItem field="language" :label="$t('welcome.general.language_label')">
@@ -30,9 +32,32 @@
               </FogFormItem>
             </FogForm>
           </div>
-          <div v-else-if="currentStep === 3" key="Git" class="welcome-Git absolute">Git</div>
+          <div v-else-if="currentStep === 3" key="Git" class="welcome-Git absolute">
+            <FogAlert type="error" v-if="!isGitInstall" banner style="border-radius: 20px;">
+              <template #action>
+                <FogButton size="mini" shape="round" type="primary" @click="downloadGit">{{ $t("welcome.git.download_button_text") }}
+                </FogButton>
+              </template>
+              {{ $t("welcome.git.git_not_installed_tip") }}
+            </FogAlert>
+            <FogTypographyTitle>{{ $t('welcome.git.git_setting_title') }}</FogTypographyTitle>
+            <FogForm :model="preferenceStore" :style="{ width: '600px', marginTop: '20px' }"
+              :label-col-props="{ span: 8, offset: 0 }" :wrapper-col-props="{ span: 14, offset: 0 }">
+              <FogFormItem field="global username" :label="$t('welcome.git.global_name_label')">
+                <FogInput size="mini" :disabled="!isGitInstall" :loading="isLoadingGitGlobalUsername"
+                  v-model="gitGlobalUsername" />
+              </FogFormItem>
+              <FogFormItem field="global email address" :label="$t('welcome.git.global_email_label')">
+                <FogInput size="mini" :disabled="!isGitInstall" :loading="isLoadingGitEmailAddress"
+                  v-model="gitGlobalEmailAddress" />
+              </FogFormItem>
+            </FogForm>
+          </div>
           <div v-else-if="currentStep === 4" key="Services" class="welcome-Services absolute">Services
           </div>
+        </Transition>
+        <Transition name="fade">
+          <span class="git-version absolute bottom-5 right-5" v-if="currentStep === 3">{{ gitVersion }}</span>
         </Transition>
       </div>
       <div class="welcome-view-right-container w-2/6 h-full">
@@ -44,19 +69,19 @@
         </FogCarousel>
       </div>
     </div>
-    <FogButton class="welcome-next-button absolute right-5 bottom-5 z-50" shape="round" type="primary" @click="nextStep"
-      size="mini">
-      Next
-    </FogButton>
     <FogButton class="welcome-next-button absolute right-20 bottom-5 z-50" shape="round" type="primary"
       v-show="currentStep > 1" @click="prevStep" size="mini">
       Prev
+    </FogButton>
+    <FogButton class="welcome-next-button absolute right-5 bottom-5 z-50" shape="round" type="primary" @click="nextStep"
+      size="mini">
+      Next
     </FogButton>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue"
+import { ref, onMounted } from "vue"
 import welcome_carousel_1 from "../../assets/welcome_carousel_1.jpg"
 import welcome_carousel_2 from "../../assets/welcome_carousel_2.jpg"
 import welcome_carousel_3 from "../../assets/welcome_carousel_3.jpg"
@@ -65,9 +90,37 @@ import { useAppearanceStore } from "../../store/appearance"
 import { usePreferenceStore } from "../../store/preference"
 import { ThemeType } from "../../types/theme"
 
+const isLoadingGitGlobalUsername = ref(true)
+const isLoadingGitEmailAddress = ref(true)
+
+const gitVersion = ref('')
+const gitGlobalUsername = ref("")
+const gitGlobalEmailAddress = ref("")
+
+const isGitInstall = ref(true)
+
+onMounted(() => {
+  git_bridge.getGitVersion().then(({ result }: any) => {
+    isGitInstall.value = result.installed;
+    gitVersion.value = `git version ${result.major}.${result.minor}.${result.patch} (${result.agent})`
+  })
+  git_bridge.getGlobalUsername().then(({ result }: any) => {
+    isLoadingGitGlobalUsername.value = false;
+    gitGlobalUsername.value = result;
+  })
+  git_bridge.getGlobalEmailAddress().then(({ result }: any) => {
+    isLoadingGitEmailAddress.value = false;
+    gitGlobalEmailAddress.value = result;
+  })
+})
+
+const downloadGit = () => {
+  common_bridge.openExternal("https://git-scm.com/downloads")
+}
+
 const appearanceStore = useAppearanceStore()
 const preferenceStore = usePreferenceStore()
-const currentStep = ref(2)
+const currentStep = ref(3)
 
 const carouselImages: string[] = [welcome_carousel_1, welcome_carousel_2, welcome_carousel_3, welcome_carousel_4]
 
@@ -99,8 +152,7 @@ const prevStep = () => {
 
 <style>
 .welcome-view {
-  background-color: rgba(var(--color-bg-2));
-  color: var(--color-text-1);
+  background-color: var(--color-bg-2);
 }
 
 .move-window-content {
@@ -108,7 +160,7 @@ const prevStep = () => {
 }
 
 .welcome-view-right-container {
-  background-color: rgba(var(--color-bg-2), 1);
+  background-color: var(--color-bg-2);
   box-shadow: 0px 0px 10px var(--color-border-4);
 }
 
@@ -137,5 +189,9 @@ const prevStep = () => {
 .fade-leave-to {
   opacity: 0;
   transform: translateX(-30px);
+}
+
+.git-version {
+  color: var(--color-text-2);
 }
 </style>

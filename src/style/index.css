@@ -15,17 +15,17 @@
 }
 
 .arco-radio-button {
-  color: #fff!important;
-  background-color: rgb(var(--primary-6))!important
+  color: #fff !important;
+  background-color: rgb(var(--primary-6)) !important
 }
 
 .arco-radio-button:hover {
-  color: #fff!important;
-  background-color: rgb(var(--primary-5))!important
+  color: #fff !important;
+  background-color: rgb(var(--primary-5)) !important
 }
 
 .arco-radio-checked {
-  color: #fff!important;
+  color: #fff !important;
   background-color: rgb(var(--primary-4)) !important;
 }
 
@@ -35,4 +35,22 @@
 
 .arco-btn-size-mini {
   height: 18px !important;
+}
+
+body[arco-theme='dark'] {
+  --color-bg-2: rgba(25, 25, 25, 0.8)
+}
+
+body {
+  --color-bg-2: rgba(255, 255, 255, 0.5)
+}
+
+.arco-input-wrapper {
+  background-color: unset;
+  border-color: rgb(var(--color-text-2));
+}
+
+.arco-input-wrapper:hover {
+  background-color: unset;
+  border-color: rgb(var(--color-text-2));
 }

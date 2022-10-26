@@ -13,7 +13,6 @@ export const useAppearanceStore = defineStore<"appearance", IAppearanceStoreStat
   },
   actions: {
     changeTheme(theme: ThemeType) {
-      console.log("changeTheme", theme);
       this.theme = theme
       switchTheme(theme)
       electronStore.set("appearance.theme", theme)

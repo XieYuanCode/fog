@@ -1,8 +1,20 @@
 const en = {
   welcome: {
     general: {
-      default_cloned_directory_label: "default cloned directory",
-      language_label: "language",
+      general_setting_title: "General Setting",
+      default_cloned_directory_label: "Default Cloned Directory",
+      language_label: "Language",
+      color_theme_label: "Color Theme",
+      color_theme_light: "Light",
+      color_theme_dark: "Dark",
+      color_theme_system: "System",
+    },
+    git: {
+      git_setting_title: "Git Setting",
+      global_name_label: "Global Username",
+      global_email_label: "Global Email Address",
+      download_button_text: "Go Download",
+      git_not_installed_tip: "Git Not Installed"
     }
   },
   dialog: {
