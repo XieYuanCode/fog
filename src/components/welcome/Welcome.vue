@@ -35,7 +35,9 @@
           <div v-else-if="currentStep === 3" key="Git" class="welcome-Git absolute">
             <FogAlert type="error" v-if="!isGitInstall" banner style="border-radius: 20px;">
               <template #action>
-                <FogButton size="mini" shape="round" type="primary" @click="downloadGit">{{ $t("welcome.git.download_button_text") }}
+                <FogButton size="mini" shape="round" type="primary" @click="downloadGit">{{
+                    $t("welcome.git.download_button_text")
+                }}
                 </FogButton>
               </template>
               {{ $t("welcome.git.git_not_installed_tip") }}
@@ -45,11 +47,11 @@
               :label-col-props="{ span: 8, offset: 0 }" :wrapper-col-props="{ span: 14, offset: 0 }">
               <FogFormItem field="global username" :label="$t('welcome.git.global_name_label')">
                 <FogInput size="mini" :disabled="!isGitInstall" :loading="isLoadingGitGlobalUsername"
-                  v-model="gitGlobalUsername" />
+                  v-model="gitGlobalUsername" @change="onNameChanged" />
               </FogFormItem>
               <FogFormItem field="global email address" :label="$t('welcome.git.global_email_label')">
                 <FogInput size="mini" :disabled="!isGitInstall" :loading="isLoadingGitEmailAddress"
-                  v-model="gitGlobalEmailAddress" />
+                  v-model="gitGlobalEmailAddress" @change="onEmailChanged" />
               </FogFormItem>
             </FogForm>
           </div>
@@ -134,6 +136,22 @@ const selectDefaultClonedDirectory = () => {
   }) as string[] | undefined
 
   selected && preferenceStore.setDefaultCloneUrl(selected[0])
+}
+
+const onNameChanged = () => {
+  try {
+    git_bridge.setGlobalUsername(gitGlobalUsername.value)
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+const onEmailChanged = () => {
+  try {
+    git_bridge.setGlobalEmailAddress(gitGlobalEmailAddress.value)
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 const nextStep = () => {

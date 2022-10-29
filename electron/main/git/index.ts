@@ -23,7 +23,12 @@ process.on("message", async (message: GitExecutorMessageDescriptor) => {
     case 'getGlobalEmailAddress':
       getGlobalEmailAddress().then(email => sendSuccessResult(message.requestID, email)).catch(err => sendFailedResult(message.requestID, err))
       break;
-
+    case 'setGlobalUsername':
+      setGlobalUsername(message.args[0] as string).then(() => sendSuccessResult(message.requestID, null)).catch(err => sendFailedResult(message.requestID, err))
+      break;
+    case 'setGlobalEmailAddress':
+      setGlobalEmailAddress(message.args[0] as string).then(() => sendSuccessResult(message.requestID, null)).catch(err => sendFailedResult(message.requestID, err))
+      break;
     default:
       break;
     //#endregion

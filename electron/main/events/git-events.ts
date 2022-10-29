@@ -36,5 +36,13 @@ const initGitEvents = () => {
   ipcMain.handle("Git:GetGlobalUsername", async (e) => {
     return await exec('getGlobalUsername')
   })
+
+  ipcMain.handle("Git:SetGlobalUsername", async (e, args) => {
+    return await exec('setGlobalUsername', args)
+  })
+
+  ipcMain.handle("Git:SetGlobalEmailAddress", async (e, args) => {
+    return await exec('setGlobalEmailAddress', args)
+  })
 }
 export default initGitEvents;

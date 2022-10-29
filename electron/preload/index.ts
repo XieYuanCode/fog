@@ -21,6 +21,8 @@ contextBridge.exposeInMainWorld('git_bridge', {
   getGitVersion: () => ipcRenderer.invoke('Git:GetGitVersion'),
   getGlobalUsername: () => ipcRenderer.invoke('Git:GetGlobalUsername'),
   getGlobalEmailAddress: () => ipcRenderer.invoke('Git:GetGlobalEmailAddress'),
+  setGlobalUsername: (name: string) => ipcRenderer.invoke('Git:SetGlobalUsername', [name]),
+  setGlobalEmailAddress: (email: string) => ipcRenderer.invoke('Git:SetGlobalEmailAddress', [email]),
   //#endregion
 })
 

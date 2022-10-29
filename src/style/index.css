@@ -48,9 +48,11 @@ body {
 .arco-input-wrapper {
   background-color: unset;
   border-color: rgb(var(--color-text-2));
+  color: var(--color-text-2);
 }
 
 .arco-input-wrapper:hover {
-  background-color: unset;
+  background-color: var(--color-bg-1);
   border-color: rgb(var(--color-text-2));
+  color: var(--color-text-2);
 }
