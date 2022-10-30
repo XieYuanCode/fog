@@ -8,7 +8,12 @@ class WindowManager {
   public welcomeWindow: BrowserWindow | null = null //欢迎窗口
   public addServiceAccountWindow: BrowserWindow | null = null //添加服务账号窗口
   public settingWindow: BrowserWindow | null = null //设置窗口
-  public quickOpenWin: BrowserWindow | null = null //快速启动窗口
+  public quickOpenWindow: BrowserWindow | null = null //快速启动窗口
+
+  public get currentAcitveWindwo() : BrowserWindow {
+    return BrowserWindow.getFocusedWindow()
+  }
+  
 
   private _distDir = join(__dirname, '..', "../dist")
   private _publicDir = app.isPackaged ? this._distDir : join(__dirname, '..', '../public')

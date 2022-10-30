@@ -4,7 +4,6 @@
     <div class="welcome-view-main-container w-full h-full flex">
       <div class="welcome-view-left-container w-4/6 h-full p-8 relative">
         <Transition name="fade">
-
           <div v-if="currentStep === 1" key="description" class="welcome-description absolute ">
             <FogTypographyTitle>Welcome Page</FogTypographyTitle>
           </div>
@@ -55,7 +54,11 @@
               </FogFormItem>
             </FogForm>
           </div>
-          <div v-else-if="currentStep === 4" key="Services" class="welcome-Services absolute">Services
+          <div v-else-if="currentStep === 4" key="Services" class="welcome-Services absolute">
+            <FogTypographyTitle>{{ $t('welcome.service_account.service_account_title') }}</FogTypographyTitle>
+            <div class="add-service-account-card-view flex flex-warp justify-around items-center w-full h-full">
+              <AddSerivceAccountCard v-for="card in 8"></AddSerivceAccountCard>
+            </div>
           </div>
         </Transition>
         <Transition name="fade">
@@ -91,6 +94,7 @@ import welcome_carousel_4 from "../../assets/welcome_carousel_4.jpg"
 import { useAppearanceStore } from "../../store/appearance"
 import { usePreferenceStore } from "../../store/preference"
 import { ThemeType } from "../../types/theme"
+import AddSerivceAccountCard from "../common/serviceAccount/AddSerivceAccountCard.vue"
 
 const isLoadingGitGlobalUsername = ref(true)
 const isLoadingGitEmailAddress = ref(true)
@@ -122,7 +126,7 @@ const downloadGit = () => {
 
 const appearanceStore = useAppearanceStore()
 const preferenceStore = usePreferenceStore()
-const currentStep = ref(3)
+const currentStep = ref(4)
 
 const carouselImages: string[] = [welcome_carousel_1, welcome_carousel_2, welcome_carousel_3, welcome_carousel_4]
 
@@ -168,7 +172,7 @@ const prevStep = () => {
 </script>
 
 
-<style>
+<style scoped>
 .welcome-view {
   background-color: var(--color-bg-2);
 }
@@ -211,5 +215,9 @@ const prevStep = () => {
 
 .git-version {
   color: var(--color-text-2);
+}
+
+.welcome-Services {
+  width: 600px;
 }
 </style>

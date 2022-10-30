@@ -15,6 +15,9 @@ const en = {
       global_email_label: "Global Email Address",
       download_button_text: "Go Download",
       git_not_installed_tip: "Git Not Installed"
+    },
+    service_account: {
+      service_account_title: "Service Accounts"
     }
   },
   dialog: {

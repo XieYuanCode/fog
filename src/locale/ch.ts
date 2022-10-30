@@ -21,4 +21,5 @@ const ch = {
     select_default_cloned_directory: "选择默认克隆目录"
   }
 }
+
 export default ch;
