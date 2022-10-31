@@ -1,8 +1,10 @@
 import { contextBridge, ipcRenderer } from "electron";
 import type { OpenDialogSyncOptions } from "electron"
+import { ServiceAccountType } from "../main/types/ServiceAccountType";
 
 contextBridge.exposeInMainWorld('window_bridge', {
-  goToHome: () => ipcRenderer.send('Window:GoToHome')
+  goToHome: () => ipcRenderer.send('Window:GoToHome'),
+  openAddServiceAccountWindow: (type: ServiceAccountType) => ipcRenderer.invoke("Window:OpenAddServiceAccountWindow", type)
 })
 
 contextBridge.exposeInMainWorld("store_bridge", {

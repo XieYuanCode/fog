@@ -1,4 +1,4 @@
-export declare interface IPreferenceStoreState {
+export interface IPreferenceStoreState {
   /**
    * 默认克隆位置
    */
@@ -8,8 +8,8 @@ export declare interface IPreferenceStoreState {
    */
   language: 'en' | 'ch'
 }
-export declare interface IPreferenceStoreGetter { }
-export declare interface IPreferenceStoreAction {
+export interface IPreferenceStoreGetter { }
+export interface IPreferenceStoreAction {
   setDefaultCloneUrl: (url: string) => void
   setLanguage: (language: 'en' | 'ch') => void
 }

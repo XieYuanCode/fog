@@ -1,6 +1,7 @@
 import { ipcMain, nativeTheme } from "electron"
 import windowManager from "../windowManager"
 import store from "../store"
+import { ServiceAccountType } from "../types/ServiceAccountType"
 
 const initWindowEvents = () => {
   ipcMain.on("Window:GoToHome", () => {  //欢迎页面关闭 跳转主页面
@@ -9,10 +10,12 @@ const initWindowEvents = () => {
 
     store.set("isFirstLoad", false)
   })
-  ipcMain.on("ChangeTheme", (_, theme: 'System' | 'Light' | 'Dark') => {
-    console.log("ChangeTheme", theme);
-    nativeTheme.themeSource = theme.toLowerCase() as 'system' | 'light' | 'dark'
+
+  ipcMain.handle("Window:OpenAddServiceAccountWindow", async (event, type: ServiceAccountType) => {
+    return new Promise((resolve, reject) => {
+      windowManager.createAddServiceAccountWindow(type)
+      resolve("")
+    })
   })
 }
-
 export default initWindowEvents

@@ -9,6 +9,12 @@
   height: 100vh;
 }
 
+.add-service-account-card[arco-theme='dark'] {
+  color: red;
+  background-color: green;
+}
+
+
 * {
   margin: 0;
   padding: 0;

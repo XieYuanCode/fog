@@ -17,7 +17,7 @@ const en = {
       git_not_installed_tip: "Git Not Installed"
     },
     service_account: {
-      service_account_title: "Service Accounts"
+      service_account_title: "Service Account"
     }
   },
   dialog: {

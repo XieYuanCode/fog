@@ -2,6 +2,7 @@ import { app, BrowserWindow } from "electron";
 import { join } from "path";
 import windowStateKeeper from "electron-window-state";
 import type { BrowserWindowConstructorOptions } from "electron"
+import { ServiceAccountType } from "./types/ServiceAccountType";
 
 class WindowManager {
   public mainWindow: BrowserWindow | null = null //主窗口
@@ -10,10 +11,10 @@ class WindowManager {
   public settingWindow: BrowserWindow | null = null //设置窗口
   public quickOpenWindow: BrowserWindow | null = null //快速启动窗口
 
-  public get currentAcitveWindwo() : BrowserWindow {
+  public get currentActiveWindow(): BrowserWindow {
     return BrowserWindow.getFocusedWindow()
   }
-  
+
 
   private _distDir = join(__dirname, '..', "../dist")
   private _publicDir = app.isPackaged ? this._distDir : join(__dirname, '..', '../public')
@@ -45,6 +46,10 @@ class WindowManager {
    * 创建主窗口
    */
   public createMainWindow(): BrowserWindow {
+    if (this.mainWindow) {
+      this.mainWindow.show()
+      return;
+    }
     this._mainWindowState = windowStateKeeper({ defaultWidth: 1920, defaultHeight: 1080 })
 
     this.mainWindow = new BrowserWindow({
@@ -68,6 +73,10 @@ class WindowManager {
   }
 
   public createWelcomeWindow(): BrowserWindow {
+    if (this.welcomeWindow) {
+      this.welcomeWindow.show()
+      return;
+    }
     this.welcomeWindow = new BrowserWindow({
       width: 1000,
       height: 600,
@@ -82,6 +91,40 @@ class WindowManager {
     }
 
     return this.welcomeWindow;
+  }
+
+  public createAddServiceAccountWindow(type: ServiceAccountType): BrowserWindow {
+    if (this.addServiceAccountWindow) {
+      if (app.isPackaged) {
+        this.addServiceAccountWindow.loadFile(this._baseIndexHtmlAddress + `/#/${type}`)
+      } else {
+        this.addServiceAccountWindow.loadURL(`${this._baseDevelopUrl}#/${type}`)
+      }
+
+      this.welcomeWindow.setParentWindow(this.currentActiveWindow);
+      this.welcomeWindow.show()
+      return;
+    }
+
+    this.addServiceAccountWindow = new BrowserWindow({
+      width: 600,
+      height: 320,
+      parent: this.currentActiveWindow,
+      modal: true,
+      movable: false,
+      resizable: false,
+      ...this._basicWindowOption
+    })
+
+    if (app.isPackaged) {
+      this.addServiceAccountWindow.loadFile(this._baseIndexHtmlAddress + `/#/addServiceAccount/${type}`)
+    } else {
+      this.addServiceAccountWindow.loadURL(`${this._baseDevelopUrl}#/addServiceAccount/${type}`)
+    }
+
+    this.addServiceAccountWindow.show()
+
+    this.addServiceAccountWindow.webContents.openDevTools()
   }
 
   public killAllWindows() {

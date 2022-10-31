@@ -1,9 +1,9 @@
 import { ThemeType } from "../theme";
 
-export declare interface IAppearanceStoreState {
+export interface IAppearanceStoreState {
   theme: ThemeType
 }
-export declare interface IAppearanceStoreGetter { }
-export declare interface IAppearanceStoreAction {
+export interface IAppearanceStoreGetter { }
+export interface IAppearanceStoreAction {
   changeTheme: (theme: ThemeType) => void
 }

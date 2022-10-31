@@ -56,8 +56,10 @@
           </div>
           <div v-else-if="currentStep === 4" key="Services" class="welcome-Services absolute">
             <FogTypographyTitle>{{ $t('welcome.service_account.service_account_title') }}</FogTypographyTitle>
-            <div class="add-service-account-card-view flex flex-warp justify-around items-center w-full h-full">
-              <AddSerivceAccountCard v-for="card in 8"></AddSerivceAccountCard>
+            <div class="add-service-account-card-view flex flex-wrap justify-around items-center w-full h-full">
+              <AddServiceAccountCard v-for="card in availableServiceAccountType" :info="card"
+                @click="addServiceAccount">
+              </AddServiceAccountCard>
             </div>
           </div>
         </Transition>
@@ -86,6 +88,7 @@
 </template>
 
 <script setup lang="ts">
+import { getAvailableServiceAccountTypes } from "../../utils/serviceAccount"
 import { ref, onMounted } from "vue"
 import welcome_carousel_1 from "../../assets/welcome_carousel_1.jpg"
 import welcome_carousel_2 from "../../assets/welcome_carousel_2.jpg"
@@ -94,7 +97,8 @@ import welcome_carousel_4 from "../../assets/welcome_carousel_4.jpg"
 import { useAppearanceStore } from "../../store/appearance"
 import { usePreferenceStore } from "../../store/preference"
 import { ThemeType } from "../../types/theme"
-import AddSerivceAccountCard from "../common/serviceAccount/AddSerivceAccountCard.vue"
+import AddServiceAccountCard from "../common/serviceAccount/AddServiceAccountCard.vue"
+import { ServiceAccountType } from "../../types/ServiceAccountType"
 
 const isLoadingGitGlobalUsername = ref(true)
 const isLoadingGitEmailAddress = ref(true)
@@ -104,6 +108,7 @@ const gitGlobalUsername = ref("")
 const gitGlobalEmailAddress = ref("")
 
 const isGitInstall = ref(true)
+const availableServiceAccountType = getAvailableServiceAccountTypes();
 
 onMounted(() => {
   git_bridge.getGitVersion().then(({ result }: any) => {
@@ -119,6 +124,11 @@ onMounted(() => {
     gitGlobalEmailAddress.value = result;
   })
 })
+
+const addServiceAccount = async (type: ServiceAccountType) => {
+  const result = await window_bridge.openAddServiceAccountWindow(type);
+  console.log("????", result);
+}
 
 const downloadGit = () => {
   common_bridge.openExternal("https://git-scm.com/downloads")
@@ -183,7 +193,7 @@ const prevStep = () => {
 
 .welcome-view-right-container {
   background-color: var(--color-bg-2);
-  box-shadow: 0px 0px 10px var(--color-border-4);
+  box-shadow: 0px 0px 10px rgb(var(--primary-6));
 }
 
 .welcome-view-left-container {
