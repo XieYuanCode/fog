@@ -126,7 +126,7 @@ onMounted(() => {
 })
 
 const addServiceAccount = async (type: ServiceAccountType) => {
-  const result = await window_bridge.openAddServiceAccountWindow(type);
+  const result = await window_bridge.openAddServiceAccountWindow(type, "welcome");
   console.log("????", result);
 }
 

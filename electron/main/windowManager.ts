@@ -93,23 +93,28 @@ class WindowManager {
     return this.welcomeWindow;
   }
 
-  public createAddServiceAccountWindow(type: ServiceAccountType): BrowserWindow {
+  public createAddServiceAccountWindow(type: ServiceAccountType, parent: "welcome" | 'main'): BrowserWindow {
     if (this.addServiceAccountWindow) {
+      console.log(1);
       if (app.isPackaged) {
+        console.log(2);
         this.addServiceAccountWindow.loadFile(this._baseIndexHtmlAddress + `/#/${type}`)
       } else {
+        console.log(3);
         this.addServiceAccountWindow.loadURL(`${this._baseDevelopUrl}#/${type}`)
       }
 
-      this.welcomeWindow.setParentWindow(this.currentActiveWindow);
-      this.welcomeWindow.show()
+      // const parentWindow = this.welcomeWindow.getParentWindow()
+      // if (parent === "main" && parentWindow !== this.mainWindow) this.addServiceAccountWindow.setParentWindow(this.mainWindow)
+      // if (parent === "welcome" && parentWindow !== this.welcomeWindow) this.addServiceAccountWindow.setParentWindow(this.welcomeWindow)
+      this.addServiceAccountWindow.show()
       return;
     }
 
     this.addServiceAccountWindow = new BrowserWindow({
       width: 600,
       height: 320,
-      parent: this.currentActiveWindow,
+      parent: parent === 'main' ? this.mainWindow : this.welcomeWindow,
       modal: true,
       movable: false,
       resizable: false,

@@ -4,7 +4,8 @@ import { ServiceAccountType } from "../main/types/ServiceAccountType";
 
 contextBridge.exposeInMainWorld('window_bridge', {
   goToHome: () => ipcRenderer.send('Window:GoToHome'),
-  openAddServiceAccountWindow: (type: ServiceAccountType) => ipcRenderer.invoke("Window:OpenAddServiceAccountWindow", type)
+  openAddServiceAccountWindow: (type: ServiceAccountType, parent: 'welcome' | "main") => ipcRenderer.invoke("Window:OpenAddServiceAccountWindow", type, parent),
+  closeAddServiceAccountWindow: () => ipcRenderer.invoke("Window:closeAddServiceAccountWindow")
 })
 
 contextBridge.exposeInMainWorld("store_bridge", {
