@@ -96,24 +96,25 @@ class WindowManager {
 
   public createAddServiceAccountWindow(type: ServiceAccountType, parent: "welcome" | 'main'): BrowserWindow {
     if (this.addServiceAccountWindow) {
-      if (app.isPackaged) {
-        this.addServiceAccountWindow.loadFile(this._baseIndexHtmlAddress + `/#/${type}`).then(() => {
-          this.addServiceAccountWindow.reload()
-          this.addServiceAccountWindow.show()
-        })
-      } else {
-        this.addServiceAccountWindow.loadURL(`${this._baseDevelopUrl}#/${type}`).then(() => {
-          this.addServiceAccountWindow.reload()
-          this.addServiceAccountWindow.show()
-        })
-      }
+      // if (app.isPackaged) {
+      //   this.addServiceAccountWindow.loadFile(this._baseIndexHtmlAddress + `/#/${type}`).then(() => {
+      //     this.addServiceAccountWindow.reload()
+      //     this.addServiceAccountWindow.show()
+      //   })
+      // } else {
+      //   this.addServiceAccountWindow.loadURL(`${this._baseDevelopUrl}#/${type}`).then(() => {
+      //     this.addServiceAccountWindow.reload()
+      //     this.addServiceAccountWindow.show()
+      //   })
+      // }
 
-      return this.addServiceAccountWindow;
+      // return this.addServiceAccountWindow;
+      return
     }
 
     this.addServiceAccountWindow = new BrowserWindow({
       width: 600,
-      height: 320,
+      height: 280,
       parent: parent === 'main' ? this.mainWindow : this.welcomeWindow,
       modal: true,
       movable: false,

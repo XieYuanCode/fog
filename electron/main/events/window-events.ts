@@ -1,4 +1,4 @@
-import { ipcMain, nativeTheme } from "electron"
+import { ipcMain } from "electron"
 import windowManager from "../windowManager"
 import store from "../store"
 import { ServiceAccountType } from "../types/ServiceAccountType"
@@ -14,15 +14,15 @@ const initWindowEvents = () => {
   ipcMain.handle("Window:OpenAddServiceAccountWindow", async (event, type: ServiceAccountType, parent: 'welcome' | 'main') => {
     return new Promise((resolve, reject) => {
       windowManager.createAddServiceAccountWindow(type, parent)
-      resolve("")
+      resolve(null)
     })
   })
 
   ipcMain.handle("Window:closeAddServiceAccountWindow", async (event) => {
     return new Promise((resolve, reject) => {
-      windowManager.addServiceAccountWindow.hide()
-      // windowManager.addServiceAccountWindow = null;
-      resolve("")
+      windowManager.addServiceAccountWindow.close()
+      windowManager.addServiceAccountWindow = null;
+      resolve(null)
     })
   })
 }

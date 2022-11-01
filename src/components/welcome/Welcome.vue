@@ -113,7 +113,7 @@ const availableServiceAccountType = getAvailableServiceAccountTypes();
 onMounted(() => {
   git_bridge.getGitVersion().then(({ result }: any) => {
     isGitInstall.value = result.installed;
-    gitVersion.value = `git version ${result.major}.${result.minor}.${result.patch} (${result.agent})`
+    gitVersion.value = `git version ${result.major}.${result.minor}.${result.patch} ${result.agent ? `(${result.agent})` : ""}`
   })
   git_bridge.getGlobalUsername().then(({ result }: any) => {
     isLoadingGitGlobalUsername.value = false;
@@ -172,7 +172,7 @@ const nextStep = () => {
   if (currentStep.value < 4) {
     currentStep.value++
   } else {
-    window_bridge.goToHome()
+    // window_bridge.goToHome()
   }
 }
 
