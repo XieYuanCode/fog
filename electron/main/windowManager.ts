@@ -81,6 +81,7 @@ class WindowManager {
       width: 1000,
       height: 600,
       resizable: false,
+      fullscreenable: false,
       ...this._basicWindowOption
     })
 
@@ -95,20 +96,19 @@ class WindowManager {
 
   public createAddServiceAccountWindow(type: ServiceAccountType, parent: "welcome" | 'main'): BrowserWindow {
     if (this.addServiceAccountWindow) {
-      console.log(1);
       if (app.isPackaged) {
-        console.log(2);
-        this.addServiceAccountWindow.loadFile(this._baseIndexHtmlAddress + `/#/${type}`)
+        this.addServiceAccountWindow.loadFile(this._baseIndexHtmlAddress + `/#/${type}`).then(() => {
+          this.addServiceAccountWindow.reload()
+          this.addServiceAccountWindow.show()
+        })
       } else {
-        console.log(3);
-        this.addServiceAccountWindow.loadURL(`${this._baseDevelopUrl}#/${type}`)
+        this.addServiceAccountWindow.loadURL(`${this._baseDevelopUrl}#/${type}`).then(() => {
+          this.addServiceAccountWindow.reload()
+          this.addServiceAccountWindow.show()
+        })
       }
 
-      // const parentWindow = this.welcomeWindow.getParentWindow()
-      // if (parent === "main" && parentWindow !== this.mainWindow) this.addServiceAccountWindow.setParentWindow(this.mainWindow)
-      // if (parent === "welcome" && parentWindow !== this.welcomeWindow) this.addServiceAccountWindow.setParentWindow(this.welcomeWindow)
-      this.addServiceAccountWindow.show()
-      return;
+      return this.addServiceAccountWindow;
     }
 
     this.addServiceAccountWindow = new BrowserWindow({
@@ -130,6 +130,8 @@ class WindowManager {
     this.addServiceAccountWindow.show()
 
     this.addServiceAccountWindow.webContents.openDevTools()
+
+    return this.addServiceAccountWindow;
   }
 
   public killAllWindows() {
