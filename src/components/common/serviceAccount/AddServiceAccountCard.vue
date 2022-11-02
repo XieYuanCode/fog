@@ -44,11 +44,11 @@ const onClicked = () => {
   width: 140px;
   height: 70px;
   margin: 5px;
-  box-shadow: inset 0px 0px 5px rgb(var(--primary-4));
+  box-shadow: 0px 0px 2px rgb(var(--primary-6));
 }
 
 .add-service-account-card:hover {
-  box-shadow: inset -0px 0px 7px rgb(var(--primary-4));
+  box-shadow: inset -0px 0px 5px rgb(var(--primary-6));
 }
 
 .add-service-account-card-disabled {
@@ -60,8 +60,9 @@ body[arco-theme='dark'] .add-service-account-card {
   filter: brightness(1.5);
 }
 
+
 .add-service-account-card-disabled:hover {
-  box-shadow: inset 0px 0px 5px rgb(var(--primary-4)) !important;
+  box-shadow: 0px 0px 2px rgb(var(--primary-6)) !important;
 }
 
 .add-service-account-card-mark {

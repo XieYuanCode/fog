@@ -4,10 +4,11 @@ import { GitExecutorMessageDescriptor } from "../git/GitExecutorMessageDescripto
 import { join } from "path"
 import { GitExecuteResult } from "../git/GitExtcuteResult";
 import { uuid } from "../common";
+import { gitExecutorAction } from "../types/gitExecutorAction";
 
 const git_child_process = fork(join(__dirname, '../', 'git', 'index'))
 
-const exec = async (method: 'getBranches' | 'getLocalBranches' | 'deleteLocalBranch' | 'deleteLocalBranches' | 'getGlobalUsername' | 'getGlobalEmailAddress' | 'getGitVersion' | 'setGlobalUsername' | 'setGlobalEmailAddress', args: [] = []) => {
+const exec = async (method: gitExecutorAction, args: [] = []) => {
   return new Promise((resolve, reject) => {
     const requestID = uuid()
     git_child_process.send(new GitExecutorMessageDescriptor(requestID, method, args))

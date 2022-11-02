@@ -6,6 +6,7 @@ import { ServiceAccountType } from "../types/ServiceAccountType"
 const initWindowEvents = () => {
   ipcMain.on("Window:GoToHome", () => {  //欢迎页面关闭 跳转主页面
     windowManager.welcomeWindow.hide()
+    windowManager.mainWindow.reload()
     windowManager.mainWindow.show()
 
     store.set("isFirstLoad", false)

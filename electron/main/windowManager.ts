@@ -69,6 +69,8 @@ class WindowManager {
       this.mainWindow.loadURL(this._baseDevelopUrl)
     }
 
+    this.mainWindow.webContents.openDevTools()
+
     return this.mainWindow;
   }
 
@@ -129,8 +131,6 @@ class WindowManager {
     }
 
     this.addServiceAccountWindow.show()
-
-    this.addServiceAccountWindow.webContents.openDevTools()
 
     return this.addServiceAccountWindow;
   }

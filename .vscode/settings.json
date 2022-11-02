@@ -13,6 +13,7 @@
     "axios",
     "fullscreenable",
     "Gitee",
-    "pinia"
+    "pinia",
+    "Sider"
   ]
 }

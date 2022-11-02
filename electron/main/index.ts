@@ -28,7 +28,6 @@ app.whenReady().then(() => {
   if(isFirstLoad) {
     welcomeWindow = windowManager.createWelcomeWindow();
     welcomeWindow.show();
-    // welcomeWindow.webContents.openDevTools();
   } else {
     mainWindow.show();
   }

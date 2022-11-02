@@ -32,7 +32,7 @@
             </FogForm>
           </div>
           <div v-else-if="currentStep === 3" key="Git" class="welcome-Git absolute">
-            <FogAlert type="error" v-if="!isGitInstall" banner style="border-radius: 20px;">
+            <FogAlert type="error" v-if="!gitGlobalInformation.isInstalled" banner style="border-radius: 20px;">
               <template #action>
                 <FogButton size="mini" shape="round" type="primary" @click="downloadGit">{{
                     $t("welcome.git.download_button_text")
@@ -45,12 +45,12 @@
             <FogForm :model="preferenceStore" :style="{ width: '600px', marginTop: '20px' }"
               :label-col-props="{ span: 8, offset: 0 }" :wrapper-col-props="{ span: 14, offset: 0 }">
               <FogFormItem field="global username" :label="$t('welcome.git.global_name_label')">
-                <FogInput size="mini" :disabled="!isGitInstall" :loading="isLoadingGitGlobalUsername"
-                  v-model="gitGlobalUsername" @change="onNameChanged" />
+                <FogInput size="mini" :disabled="!gitGlobalInformation.isInstalled"
+                  :loading="isLoadingGitGlobalUsername" v-model="gitGlobalInformation.name" @change="onNameChanged" />
               </FogFormItem>
               <FogFormItem field="global email address" :label="$t('welcome.git.global_email_label')">
-                <FogInput size="mini" :disabled="!isGitInstall" :loading="isLoadingGitEmailAddress"
-                  v-model="gitGlobalEmailAddress" @change="onEmailChanged" />
+                <FogInput size="mini" :disabled="!gitGlobalInformation.isInstalled" :loading="isLoadingGitEmailAddress"
+                  v-model="gitGlobalInformation.emailAddress" @change="onEmailChanged" />
               </FogFormItem>
             </FogForm>
           </div>
@@ -64,7 +64,8 @@
           </div>
         </Transition>
         <Transition name="fade">
-          <span class="git-version absolute bottom-5 right-5" v-if="currentStep === 3">{{ gitVersion }}</span>
+          <span class="git-version absolute bottom-5 right-5" v-if="currentStep === 3">{{ gitGlobalInformation.version
+          }}</span>
         </Transition>
       </div>
       <div class="welcome-view-right-container w-2/6 h-full">
@@ -88,46 +89,48 @@
 </template>
 
 <script setup lang="ts">
-import { getAvailableServiceAccountTypes } from "../../utils/serviceAccount"
-import { ref, onMounted } from "vue"
+import { onMounted, ref, reactive } from "vue"
 import welcome_carousel_1 from "../../assets/welcome_carousel_1.jpg"
 import welcome_carousel_2 from "../../assets/welcome_carousel_2.jpg"
 import welcome_carousel_3 from "../../assets/welcome_carousel_3.jpg"
 import welcome_carousel_4 from "../../assets/welcome_carousel_4.jpg"
 import { useAppearanceStore } from "../../store/appearance"
 import { usePreferenceStore } from "../../store/preference"
-import { ThemeType } from "../../types/theme"
-import AddServiceAccountCard from "../common/serviceAccount/AddServiceAccountCard.vue"
 import { ServiceAccountType } from "../../types/ServiceAccountType"
+import { ThemeType } from "../../types/theme"
+import { getAvailableServiceAccountTypes } from "../../utils/serviceAccount"
+import AddServiceAccountCard from "../common/serviceAccount/AddServiceAccountCard.vue"
 
 const isLoadingGitGlobalUsername = ref(true)
 const isLoadingGitEmailAddress = ref(true)
 
-const gitVersion = ref('')
-const gitGlobalUsername = ref("")
-const gitGlobalEmailAddress = ref("")
+const gitGlobalInformation = reactive({
+  version: "",
+  name: "",
+  emailAddress: "",
+  isInstalled: true
+})
 
-const isGitInstall = ref(true)
 const availableServiceAccountType = getAvailableServiceAccountTypes();
 
 onMounted(() => {
   git_bridge.getGitVersion().then(({ result }: any) => {
-    isGitInstall.value = result.installed;
-    gitVersion.value = `git version ${result.major}.${result.minor}.${result.patch} ${result.agent ? `(${result.agent})` : ""}`
+    gitGlobalInformation.isInstalled = result.installed;
+    gitGlobalInformation.version = `git version ${result.major}.${result.minor}.${result.patch} ${result.agent ? `(${result.agent})` : ""}`
   })
   git_bridge.getGlobalUsername().then(({ result }: any) => {
     isLoadingGitGlobalUsername.value = false;
-    gitGlobalUsername.value = result;
+    gitGlobalInformation.name = result;
   })
   git_bridge.getGlobalEmailAddress().then(({ result }: any) => {
     isLoadingGitEmailAddress.value = false;
-    gitGlobalEmailAddress.value = result;
+    gitGlobalInformation.emailAddress = result;
   })
 })
 
 const addServiceAccount = async (type: ServiceAccountType) => {
-  const result = await window_bridge.openAddServiceAccountWindow(type, "welcome");
-  console.log("????", result);
+  console.log('addServiceAccount', type);
+  window_bridge.openAddServiceAccountWindow(type, "welcome");
 }
 
 const downloadGit = () => {
@@ -152,27 +155,15 @@ const selectDefaultClonedDirectory = () => {
   selected && preferenceStore.setDefaultCloneUrl(selected[0])
 }
 
-const onNameChanged = () => {
-  try {
-    git_bridge.setGlobalUsername(gitGlobalUsername.value)
-  } catch (error) {
-    console.log(error);
-  }
-}
+const onNameChanged = () => { git_bridge.setGlobalUsername(gitGlobalInformation.name) }
 
-const onEmailChanged = () => {
-  try {
-    git_bridge.setGlobalEmailAddress(gitGlobalEmailAddress.value)
-  } catch (error) {
-    console.log(error);
-  }
-}
+const onEmailChanged = () => { git_bridge.setGlobalEmailAddress(gitGlobalInformation.emailAddress) }
 
 const nextStep = () => {
   if (currentStep.value < 4) {
     currentStep.value++
   } else {
-    // window_bridge.goToHome()
+    window_bridge.goToHome()
   }
 }
 
@@ -187,13 +178,12 @@ const prevStep = () => {
   background-color: var(--color-bg-2);
 }
 
-.move-window-content {
-  -webkit-app-region: drag;
+.welcome-view-right-container {
+  box-shadow: 0px 0px 10px rgb(var(--primary-6));
 }
 
-.welcome-view-right-container {
-  background-color: var(--color-bg-2);
-  box-shadow: 0px 0px 10px rgb(var(--primary-6));
+body[arco-theme='dark'] .welcome-view-right-container {
+  box-shadow: 0px 0px 10px rgb(var(--primary-1));
 }
 
 .welcome-view-left-container {
