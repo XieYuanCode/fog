@@ -1,6 +1,6 @@
 <template>
   <div class="explorer-view w-full">
-    <FogTree blockNode :data="treeData" size="mini" class="explorer-tree select-none" />
+    <FogTree blockNode :data="treeData" draggable size="mini" class="explorer-tree select-none" />
   </div>
 </template>
 
@@ -29,6 +29,163 @@ const treeData = [
         title: 'Branch 0-0-1',
         key: '0-0-1',
         children: [
+          {
+            title: 'Leaf',
+            key: '0-0-1-0',
+          },
+          {
+            title: 'Leaf',
+            key: '0-0-1-0',
+          },
+          {
+            title: 'Leaf',
+            key: '0-0-1-0',
+          },
+          {
+            title: 'Leaf',
+            key: '0-0-1-0',
+          },
+          {
+            title: 'Leaf',
+            key: '0-0-1-0',
+          },
+          {
+            title: 'Leaf',
+            key: '0-0-1-0',
+          },
+          {
+            title: 'Leaf',
+            key: '0-0-1-0',
+          },
+          {
+            title: 'Leaf',
+            key: '0-0-1-0',
+          },
+          {
+            title: 'Leaf',
+            key: '0-0-1-0',
+          },
+          {
+            title: 'Leaf',
+            key: '0-0-1-0',
+          },
+          {
+            title: 'Leaf',
+            key: '0-0-1-0',
+          },
+          {
+            title: 'Leaf',
+            key: '0-0-1-0',
+          },
+          {
+            title: 'Leaf',
+            key: '0-0-1-0',
+          },
+          {
+            title: 'Leaf',
+            key: '0-0-1-0',
+          },
+          {
+            title: 'Leaf',
+            key: '0-0-1-0',
+          },
+          {
+            title: 'Leaf',
+            key: '0-0-1-0',
+          },
+          {
+            title: 'Leaf',
+            key: '0-0-1-0',
+          },
+          {
+            title: 'Leaf',
+            key: '0-0-1-0',
+          },
+          {
+            title: 'Leaf',
+            key: '0-0-1-0',
+          },
+          {
+            title: 'Leaf',
+            key: '0-0-1-0',
+          },
+          {
+            title: 'Leaf',
+            key: '0-0-1-0',
+          },
+          {
+            title: 'Leaf',
+            key: '0-0-1-0',
+          },
+          {
+            title: 'Leaf',
+            key: '0-0-1-0',
+          },
+          {
+            title: 'Leaf',
+            key: '0-0-1-0',
+          },
+          {
+            title: 'Leaf',
+            key: '0-0-1-0',
+          },
+
+          {
+            title: 'Leaf',
+            key: '0-0-1-0',
+          },
+          {
+            title: 'Leaf',
+            key: '0-0-1-0',
+          },
+          {
+            title: 'Leaf',
+            key: '0-0-1-0',
+          },
+          {
+            title: 'Leaf',
+            key: '0-0-1-0',
+          },
+          {
+            title: 'Leaf',
+            key: '0-0-1-0',
+          },
+          {
+            title: 'Leaf',
+            key: '0-0-1-0',
+          },
+          {
+            title: 'Leaf',
+            key: '0-0-1-0',
+          },
+          {
+            title: 'Leaf',
+            key: '0-0-1-0',
+          },
+          {
+            title: 'Leaf',
+            key: '0-0-1-0',
+          },
+          {
+            title: 'Leaf',
+            key: '0-0-1-0',
+          },
+          {
+            title: 'Leaf',
+            key: '0-0-1-0',
+          },
+          {
+            title: 'Leaf',
+            key: '0-0-1-0',
+          },
+          {
+            title: 'Leaf',
+            key: '0-0-1-0',
+          },
+          {
+            title: 'Leaf',
+            key: '0-0-1-0',
+          },
           {
             title: 'Leaf',
             key: '0-0-1-0',
