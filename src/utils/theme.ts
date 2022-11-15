@@ -2,22 +2,27 @@ import { ThemeType } from "../types/theme"
 
 export const switchTheme = (theme: ThemeType) => {
   if (theme === ThemeType.Dark) {
-    document.body.setAttribute('arco-theme', 'dark')
+    document.getElementsByTagName('html')[0]?.classList.add("dark")
     removeSystemThemeChangedEventListener()
   } else if (theme === ThemeType.Light) {
-    document.body.removeAttribute('arco-theme')
+    document.getElementsByTagName('html')[0]?.classList.remove("dark")
     removeSystemThemeChangedEventListener()
   } else if (theme === ThemeType.System) {
     const isDark = window.matchMedia('(prefers-color-scheme: Dark)').matches
 
     if (isDark) {
-      document.body.setAttribute('arco-theme', 'dark')
+      document.getElementsByTagName('html')[0]?.classList.add("dark")
     } else {
-      document.body.removeAttribute('arco-theme')
+      document.getElementsByTagName('html')[0]?.classList.remove("dark")
     }
 
     addSystemThemeChangedEventListener()
   }
+}
+
+export const changeColor = (color: string) => {
+  const el = document.documentElement;
+  el.style.setProperty('--el-color-primary', color)
 }
 
 const handler = () => {

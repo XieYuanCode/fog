@@ -14,7 +14,7 @@ const en = {
       global_name_label: "Global Username",
       global_email_label: "Global Email Address",
       download_button_text: "Go Download",
-      git_not_installed_tip: "Git Not Installed"
+      git_not_installed_tip: "Git Not Installed! Please Restart The Fog After Installation"
     },
     service_account: {
       service_account_title: "Service Account"

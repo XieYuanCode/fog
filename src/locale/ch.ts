@@ -14,7 +14,7 @@ const ch = {
       global_name_label: "全局名称",
       global_email_label: "全局邮箱",
       download_button_text: "去下载",
-      git_not_installed_tip: "Git未安装"
+      git_not_installed_tip: "Git未安装!请安装后重新打开app"
     },
     service_account: {
       service_account_title: "账号"

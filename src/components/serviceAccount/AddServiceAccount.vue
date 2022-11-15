@@ -6,12 +6,12 @@
     </AddGitlabceeeServiceAccountVue>
 
     <span class="authentication-status absolute bottom-5 left-5">{{ authenticationStatus }}</span>
-    <FogButton class="absolute right-24 bottom-5 z-50" shape="round" type="outline" size="mini" @click="closeWindow">
+    <ElButton class="absolute right-24 bottom-5 z-50" round plain size="small" @click="closeWindow">
       {{ $t("dialog.add_service_account.cancel_btn_text") }}
-    </FogButton>
-    <FogButton class="absolute right-5 bottom-5 z-50" shape="round" type="primary" size="mini" @click="addAccount">
+    </ElButton>
+    <ElButton class="absolute right-5 bottom-5 z-50" round type="primary" size="small" @click="addAccount">
       {{ $t("dialog.add_service_account.confirm_btn_text") }}
-    </FogButton>
+    </ElButton>
   </div>
 </template>
 
@@ -34,14 +34,14 @@ const closeWindow = () => {
 }
 
 const addAccount = async () => {
-  authenticationStatus.value = "ing"
+  authenticationStatus.value = "Authorizing"
 
   try {
     await addServiceAccountFormRef.value.addAccount();
-    authenticationStatus.value = "success"
+    authenticationStatus.value = "Authorization Succeeded"
     closeWindow()
   } catch (error) {
-    authenticationStatus.value = "failed, " + (error as AxiosError<any>)?.response?.data?.message;
+    authenticationStatus.value = "Authorization Failure, " + (error as AxiosError<any>)?.response?.data?.message;
   }
 }
 </script>

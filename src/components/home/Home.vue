@@ -24,12 +24,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import Explorer from "../explorer/Explorer.vue"
 
 const currentSelectExplorerType = ref("LocalRepos")
 </script>
-
 
 <style scoped>
 .home-view {

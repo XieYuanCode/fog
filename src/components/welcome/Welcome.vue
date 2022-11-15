@@ -2,89 +2,89 @@
   <div class="welcome-view select-none h-full w-full">
     <div class="move-window-content h-6 w-full absolute top-0 left-0 "></div>
     <div class="welcome-view-main-container w-full h-full flex">
-      <div class="welcome-view-left-container w-4/6 h-full p-8 relative">
+      <div class="welcome-view-left-container w-4/6 h-full box-border p-10">
         <Transition name="fade">
-          <div v-if="currentStep === 1" key="description" class="welcome-description absolute ">
-            <FogTypographyTitle>Welcome Page</FogTypographyTitle>
+          <div v-if="currentStep === 0" key="description" class="welcome-description welcome-item-panel absolute">
+            <span class="extra-large-text">Welcome Page</span>
           </div>
-          <div v-else-if="currentStep === 2" key="General" class="welcome-General absolute">
-            <FogTypographyTitle>{{ $t('welcome.general.general_setting_title') }}</FogTypographyTitle>
-            <FogForm :model="preferenceStore" :style="{ width: '600px', marginTop: '20px' }"
-              :label-col-props="{ span: 8, offset: 0 }" :wrapper-col-props="{ span: 14, offset: 0 }">
-              <FogFormItem field="default folder" :label="$t('welcome.general.default_cloned_directory_label')">
-                <FogButton type="primary" size="mini" @click="selectDefaultClonedDirectory">{{
-                    preferenceStore.defaultCloneUrl
-                }}</FogButton>
-              </FogFormItem>
-              <FogFormItem field="theme" :label="$t('welcome.general.color_theme_label')">
-                <FogRadioGroup type="button" size="mini" v-model="appearanceStore.theme" @change="themeChanged">
-                  <FogRadio value="Light">{{ $t('welcome.general.color_theme_light') }}</FogRadio>
-                  <FogRadio value="Dark">{{ $t('welcome.general.color_theme_dark') }}</FogRadio>
-                  <FogRadio value="System">{{ $t('welcome.general.color_theme_system') }}</FogRadio>
-                </FogRadioGroup>
-              </FogFormItem>
-              <FogFormItem field="language" :label="$t('welcome.general.language_label')">
-                <FogRadioGroup type="button" size="mini" v-model="preferenceStore.language" @change="languageChanged">
-                  <FogRadio value="en">English</FogRadio>
-                  <FogRadio value="ch">简体中文</FogRadio>
-                </FogRadioGroup>
-              </FogFormItem>
-            </FogForm>
+          <div v-else-if="currentStep === 1" key="General" class="welcome-general welcome-item-panel absolute">
+            <span class="extra-large-text">{{ $t('welcome.general.general_setting_title') }}</span>
+            <ElForm :model="preferenceStore" size="small" class="welcome-form mt-10" label-width="180"
+              label-position="right">
+              <ElFormItem :label="$t('welcome.general.default_cloned_directory_label')">
+                <ElButton type="primary" size="small" @click="selectDefaultClonedDirectory">
+                  {{ preferenceStore.defaultCloneUrl }}</ElButton>
+              </ElFormItem>
+              <ElFormItem :label="$t('welcome.general.color_theme_label')">
+                <ElRadioGroup size="small" v-model="appearanceStore.theme" @change="themeChanged">
+                  <ElRadioButton label="Light">{{ $t('welcome.general.color_theme_light') }}</ElRadioButton>
+                  <ElRadioButton label="Dark">{{ $t('welcome.general.color_theme_dark') }}</ElRadioButton>
+                  <ElRadioButton label="System">{{ $t('welcome.general.color_theme_system') }}</ElRadioButton>
+                </ElRadioGroup>
+                <ElLink class="system-theme-link ml-5" @click="openSystemColorTheme">System Color Theme</ElLink>
+              </ElFormItem>
+              <ElFormItem :label="$t('welcome.general.language_label')">
+                <ElRadioGroup size="small" v-model="preferenceStore.language" @change="languageChanged">
+                  <ElRadioButton label="en">English</ElRadioButton>
+                  <ElRadioButton label="ch">简体中文</ElRadioButton>
+                </ElRadioGroup>
+              </ElFormItem>
+            </ElForm>
           </div>
-          <div v-else-if="currentStep === 3" key="Git" class="welcome-Git absolute">
-            <FogAlert type="error" v-if="!gitGlobalInformation.isInstalled" banner style="border-radius: 20px;">
-              <template #action>
-                <FogButton size="mini" shape="round" type="primary" @click="downloadGit">{{
-                    $t("welcome.git.download_button_text")
-                }}
-                </FogButton>
-              </template>
+          <div v-else-if="currentStep === 2" key="Git" class="welcome-git welcome-item-panel absolute">
+            <ElAlert type="error" v-if="!gitGlobalInformation.isInstalled" :closable="false" :style="{margin: '10px 0px'}">
               {{ $t("welcome.git.git_not_installed_tip") }}
-            </FogAlert>
-            <FogTypographyTitle>{{ $t('welcome.git.git_setting_title') }}</FogTypographyTitle>
-            <FogForm :model="preferenceStore" :style="{ width: '600px', marginTop: '20px' }"
-              :label-col-props="{ span: 8, offset: 0 }" :wrapper-col-props="{ span: 14, offset: 0 }">
-              <FogFormItem field="global username" :label="$t('welcome.git.global_name_label')">
-                <FogInput size="mini" :disabled="!gitGlobalInformation.isInstalled"
-                  :loading="isLoadingGitGlobalUsername" v-model="gitGlobalInformation.name" @change="onNameChanged" />
-              </FogFormItem>
-              <FogFormItem field="global email address" :label="$t('welcome.git.global_email_label')">
-                <FogInput size="mini" :disabled="!gitGlobalInformation.isInstalled" :loading="isLoadingGitEmailAddress"
-                  v-model="gitGlobalInformation.emailAddress" @change="onEmailChanged" />
-              </FogFormItem>
-            </FogForm>
+            </ElAlert>
+            <span class="extra-large-text">{{ $t('welcome.git.git_setting_title') }}</span>
+            <ElForm :model="preferenceStore" size="small" class="welcome-form mt-10" label-width="180"
+              label-position="right">
+              <ElFormItem :label="$t('welcome.git.global_name_label')">
+                <ElInput size="small" :disabled="!gitGlobalInformation.isInstalled"
+                  :loading="isLoadingGitGlobalUsername" v-model="gitGlobalInformation.name" @change="onNameChanged"
+                  :prefix-icon="User" />
+              </ElFormItem>
+              <ElFormItem :label="$t('welcome.git.global_email_label')">
+                <ElInput size="small" :disabled="!gitGlobalInformation.isInstalled" :loading="isLoadingGitEmailAddress"
+                  v-model="gitGlobalInformation.emailAddress" @change="onEmailChanged" :prefix-icon="Message" />
+              </ElFormItem>
+            </ElForm>
           </div>
-          <div v-else-if="currentStep === 4" key="Services" class="welcome-Services absolute">
-            <FogTypographyTitle>{{ $t('welcome.service_account.service_account_title') }}</FogTypographyTitle>
-            <div class="add-service-account-card-view flex flex-wrap justify-around items-center w-full h-full">
+          <div v-else-if="currentStep === 3" key="Services" class="welcome-services welcome-item-panel absolute">
+            <span class="extra-large-text">{{ $t('welcome.service_account.service_account_title') }}</span>
+            <div class="add-service-account-card-view mt-10 flex flex-wrap justify-around items-center w-full h-full">
               <AddServiceAccountCard v-for="card in availableServiceAccountType" :info="card"
                 @click="addServiceAccount">
               </AddServiceAccountCard>
             </div>
           </div>
         </Transition>
-        <Transition name="fade">
-          <span class="git-version absolute bottom-5 right-5" v-if="currentStep === 3">{{ gitGlobalInformation.version
+        <span class="git-version-label extra-small-text absolute bottom-5" :style="{ right: '366px' }"
+          v-if="currentStep === 2 && gitGlobalInformation.isInstalled">{{
+              gitGlobalInformation.version
           }}</span>
-        </Transition>
       </div>
-      <div class="welcome-view-right-container w-2/6 h-full">
-        <FogCarousel class="welcome-carousel w-full h-full" :default-current="1" animation-name="fade"
-          show-arrow="never" :current="currentStep">
-          <FogCarouselItem v-for="image in carouselImages">
+      <div class="welcome-view-right-container w-2/6 h-full" :style="{
+        boxShadow: `var(--el-box-shadow-dark)`,
+      }">
+        <ElCarousel class="welcome-carousel w-full h-full" :initial-index="1" :autoplay="false" arrow="never"
+          indicator-position="none" ref="carouselElement" :loop="false">
+          <ElCarouselItem v-for="image in carouselImages" class="welcome-carousel-item h-full">
             <img :src="image" class="welcome-carousel-image w-full h-full object-cover" />
-          </FogCarouselItem>
-        </FogCarousel>
+          </ElCarouselItem>
+        </ElCarousel>
       </div>
     </div>
-    <FogButton class="welcome-next-button absolute right-20 bottom-5 z-50" shape="round" type="primary"
-      v-show="currentStep > 1" @click="prevStep" size="mini">
+    <ElButton class="welcome-next-button absolute right-5 bottom-5 z-50 mr-20" round size="small"
+      v-show="currentStep > 0" @click="prevStep" :icon="ArrowLeft">
       Prev
-    </FogButton>
-    <FogButton class="welcome-next-button absolute right-5 bottom-5 z-50" shape="round" type="primary" @click="nextStep"
-      size="mini">
+    </ElButton>
+    <ElButton class="welcome-next-button absolute right-5 bottom-5 z-50" round size="small" type="primary"
+      @click="nextStep" :disabled="currentStep === 2 && !gitGlobalInformation.isInstalled">
       Next
-    </FogButton>
+      <ElIcon class="el-icon--right">
+        <ArrowRight />
+      </ElIcon>
+    </ElButton>
   </div>
 </template>
 
@@ -100,6 +100,12 @@ import { ServiceAccountType } from "../../types/ServiceAccountType"
 import { ThemeType } from "../../types/theme"
 import { getAvailableServiceAccountTypes } from "../../utils/serviceAccount"
 import AddServiceAccountCard from "../common/serviceAccount/AddServiceAccountCard.vue"
+import {
+  ArrowLeft,
+  ArrowRight,
+  User,
+  Message
+} from '@element-plus/icons-vue'
 
 const isLoadingGitGlobalUsername = ref(true)
 const isLoadingGitEmailAddress = ref(true)
@@ -110,6 +116,8 @@ const gitGlobalInformation = reactive({
   emailAddress: "",
   isInstalled: true
 })
+
+const carouselElement = ref()
 
 const availableServiceAccountType = getAvailableServiceAccountTypes();
 
@@ -128,6 +136,10 @@ onMounted(() => {
   })
 })
 
+const getCssVarName = (type: string) => {
+  return `--el-box-shadow${type ? '-' : ''}${type}`
+}
+
 const addServiceAccount = async (type: ServiceAccountType) => {
   console.log('addServiceAccount', type);
   window_bridge.openAddServiceAccountWindow(type, "welcome");
@@ -139,7 +151,7 @@ const downloadGit = () => {
 
 const appearanceStore = useAppearanceStore()
 const preferenceStore = usePreferenceStore()
-const currentStep = ref(4)
+const currentStep = ref(0)
 
 const carouselImages: string[] = [welcome_carousel_1, welcome_carousel_2, welcome_carousel_3, welcome_carousel_4]
 
@@ -155,43 +167,35 @@ const selectDefaultClonedDirectory = () => {
   selected && preferenceStore.setDefaultCloneUrl(selected[0])
 }
 
+const openSystemColorTheme = () => {
+  common_bridge.openExternal("x-apple.systempreferences://")
+}
+
 const onNameChanged = () => { git_bridge.setGlobalUsername(gitGlobalInformation.name) }
 
 const onEmailChanged = () => { git_bridge.setGlobalEmailAddress(gitGlobalInformation.emailAddress) }
 
 const nextStep = () => {
-  if (currentStep.value < 4) {
+  if (currentStep.value < 3) {
     currentStep.value++
   } else {
-    window_bridge.goToHome()
+    // window_bridge.goToHome()
   }
+
+  carouselElement.value.next()
 }
 
 const prevStep = () => {
-  if (currentStep.value > 1) currentStep.value--
+  if (currentStep.value > 0) currentStep.value--
+
+  carouselElement.value.prev()
 }
 </script>
 
 
 <style scoped>
 .welcome-view {
-  background-color: var(--color-bg-2);
-}
-
-.welcome-view-right-container {
-  box-shadow: 0px 0px 10px rgb(var(--primary-6));
-}
-
-body[arco-theme='dark'] .welcome-view-right-container {
-  box-shadow: 0px 0px 10px rgb(var(--primary-1));
-}
-
-.welcome-view-left-container {
-  box-shadow: inset 0px 0px 10px var(--color-bg-9);
-}
-
-.welcome-next-button {
-  box-shadow: 0px 0px 5px var(--color-border-5);
+  background-color: var(--el-bg-color);
 }
 
 .welcome-carousel-image {
@@ -213,11 +217,11 @@ body[arco-theme='dark'] .welcome-view-right-container {
   transform: translateX(-30px);
 }
 
-.git-version {
-  color: var(--color-text-2);
+.git-version-label {
+  right: 366px;
 }
 
-.welcome-Services {
-  width: 600px;
+.welcome-item-panel {
+  width: 575px;
 }
 </style>

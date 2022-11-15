@@ -1,5 +1,4 @@
-import { app, BrowserWindow, shell, ipcMain } from 'electron'
-import { join } from 'path'
+import { app, BrowserWindow, systemPreferences } from 'electron'
 import { prePrepareForEnvironment, prePrepareForPlatform, setAboutPanelOptions, setAsDefaultProtocolClient } from './common'
 import store, { initRendererStore } from "./store";
 import windowManager from "./windowManager";
@@ -13,23 +12,21 @@ initRendererStore(); // 初始化渲染进程Store
 
 initAllEvents(); //初始化所有进程间事件
 
-let mainWindow: BrowserWindow | null = null //主窗口
-let welcomeWindow: BrowserWindow | null = null //欢迎窗口
-let addServiceAccountWindow: BrowserWindow | null = null //添加服务账号窗口
-let settingWindow: BrowserWindow | null = null //设置窗口
-let quickOpenWin: BrowserWindow | null = null //快速启动窗口
+// store.set("appearance.color", `#${systemPreferences.getAccentColor().substring(0, 6)}`) // 存储系统色彩主题
 
 app.whenReady().then(() => {
   setAsDefaultProtocolClient()
 
-  mainWindow = windowManager.createMainWindow(); //创建主窗口
+  windowManager.createMainWindow(); //创建主窗口
   const isFirstLoad = store.get('isFirstLoad', true) //是否第一次加载应用
 
-  if(isFirstLoad) {
-    welcomeWindow = windowManager.createWelcomeWindow();
-    welcomeWindow.show();
+  console.log(isFirstLoad);
+
+  if (isFirstLoad) {
+    windowManager.createWelcomeWindow();
+    windowManager.welcomeWindow.show();
   } else {
-    mainWindow.show();
+    windowManager.mainWindow.show();
   }
 })
 
@@ -51,7 +48,7 @@ app.on('activate', () => {
   if (allWindows.length) {
     allWindows[0].focus()
   } else {
-    mainWindow = windowManager.createMainWindow(); //创建主窗口
+    windowManager.createMainWindow(); //创建主窗口
   }
 })
 

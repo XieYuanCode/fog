@@ -8,6 +8,7 @@ import { switchTheme } from "./utils/theme";
 import { useAppearanceStore } from "./store/appearance"
 import i18n from "./locale";
 import { usePreferenceStore } from "./store/preference";
+import electronStore from "./utils/electronStore"
 
 onMounted(() => {
   switchTheme(useAppearanceStore().theme)

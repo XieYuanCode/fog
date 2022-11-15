@@ -69,8 +69,6 @@ class WindowManager {
       this.mainWindow.loadURL(this._baseDevelopUrl)
     }
 
-    this.mainWindow.webContents.openDevTools()
-
     return this.mainWindow;
   }
 
@@ -92,6 +90,8 @@ class WindowManager {
     } else {
       this.welcomeWindow.loadURL(`${this._baseDevelopUrl}#/welcome`)
     }
+
+    this.welcomeWindow.webContents.openDevTools()
 
     return this.welcomeWindow;
   }

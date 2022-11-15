@@ -1,6 +1,6 @@
 <template>
   <div class="add-service-account p-5 relative">
-    <div class="header-text ml-4">Gitlab CE/EE</div>
+    <div class="header-text ml-4">GitHub</div>
     <FogTrigger position="left" :unmount-on-close="false" :popup-translate="[-10, 0]">
       <IconQuestion class="help-icon absolute right-5 top-5" />
       <template #content>
