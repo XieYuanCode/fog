@@ -135,18 +135,11 @@ onMounted(() => {
   })
 })
 
-const getCssVarName = (type: string) => {
-  return `--el-box-shadow${type ? '-' : ''}${type}`
-}
-
 const addServiceAccount = async (type: ServiceAccountType) => {
   console.log('addServiceAccount', type);
   window_bridge.openAddServiceAccountWindow(type, "welcome");
 }
 
-const downloadGit = () => {
-  common_bridge.openExternal("https://git-scm.com/downloads")
-}
 
 const appearanceStore = useAppearanceStore()
 const preferenceStore = usePreferenceStore()

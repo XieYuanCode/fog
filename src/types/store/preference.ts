@@ -8,7 +8,7 @@ export interface IPreferenceStoreState {
    */
   language: 'en' | 'ch'
 }
-export interface IPreferenceStoreGetter { }
+export interface IPreferenceStoreGetter {}
 export interface IPreferenceStoreAction {
   setDefaultCloneUrl: (url: string) => void
   setLanguage: (language: 'en' | 'ch') => void

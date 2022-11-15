@@ -2,7 +2,8 @@
   <div class="home-view w-full h-full">
     <div class="move-window-content h-6 w-full absolute top-0 left-0 "></div>
     <ElContainer class="home-main-container h-full">
-      <ElAside width="250px" class="home-aside box-border flex flex-col items-end p-2 justify-start relative overflow-x-hidden">
+      <ElAside width="250px"
+        class="home-aside box-border flex flex-col items-end p-2 justify-start relative overflow-x-hidden">
         <ElRadioGroup v-model="currentSelectExplorerType" size="small">
           <ElTooltip :content="$t('tooltip.explorer_switch_local_repo_radio')" placement="bottom" :show-after="1000">
             <ElRadioButton label="LocalRepos" @mousedown="fadeDirection = 'fade-backward'">
@@ -28,14 +29,17 @@
         </Transition>
         <div class="explorer-footer absolute bottom-0 right-0 w-full">
           <div class="explorer-footer-actions w-full h-full p-3 box-border flex justify-between items-center">
-            <ElButton :icon="Setting" circle></ElButton>
-            <ElButton :icon="Plus" circle></ElButton>
+            <ElButton :icon="Setting" circle size="small"></ElButton>
+            <ElButton :icon="Plus" circle size="small" @click="showAddContextMenu"></ElButton>
           </div>
         </div>
       </ElAside>
       <ElContainer>
-        <ElHeader height="45px" class="home-toolbox w-full bg-blue-100">ElHeader</ElHeader>
-        <ElMain class="home-main w-full h-full bg-green-100">ElMain</ElMain>
+        <ElHeader height="45px" class="home-toolbox w-full ">ElHeader</ElHeader>
+        <ElMain class="home-main w-full h-full ">
+          {{ localRepositoryStore.groups.length }}
+
+        </ElMain>
       </ElContainer>
     </ElContainer>
   </div>
@@ -46,10 +50,101 @@ import { onMounted, ref } from "vue";
 import LocalRepoExplorer from "../explorer/LocalRepoExplorer.vue"
 import ServiceAccountExplorer from "../explorer/ServiceAccountExplorer.vue"
 import { Monitor, MostlyCloudy, Setting, Plus } from "@element-plus/icons-vue";
+import { useI18n } from "vue-i18n";
+import contextMenuCallbackEventListener from "../../utils/contextMenuCallback"
+import { useLocalRepositoryStore } from "../../store/localRepository"
+
+const localRepositoryStore = useLocalRepositoryStore()
+
+const { t } = useI18n()
 
 const currentSelectExplorerType = ref("LocalRepos")
 
 const fadeDirection = ref("fade-forward")
+
+const addLocalReposButtonContextMenuTemplate = [
+  {
+    id: "local-repo-explorer-add-group",
+    label: t("context_menu.local_repo_explorer_add_btn.add_group"),
+  },
+  {
+    type: "separator",
+  },
+  {
+    id: "local-repo-explorer-add-repo",
+    label: t('context_menu.local_repo_explorer_add_btn.add_repo')
+  },
+  {
+    id: "local-repo-explorer-create-repo",
+    label: t('context_menu.local_repo_explorer_add_btn.create_repo')
+  },
+  {
+    type: "separator",
+  },
+  {
+    id: "local-repo-explorer-clone-repo",
+    label: t('context_menu.local_repo_explorer_add_btn.clone_repo')
+  }
+]
+const addServiceAccountButtonContextMenuTemplate = [
+  {
+    id: "add-service-account-github",
+    label: "GitHub",
+    icon: "public/icons/context-menu/add-service-account/github.png",
+  },
+  {
+    id: "add-service-account-github-enterprise",
+    label: "GitHub Enterprise",
+    icon: "public/icons/context-menu/add-service-account/github.png",
+    enabled: false
+  },
+  {
+    id: "add-service-account-gitlab",
+    label: "GitLab",
+    icon: "public/icons/context-menu/add-service-account/gitlab.png",
+    enabled: false
+  },
+  {
+    id: "add-service-account-gitlab-ceee",
+    label: "GitLab CE/EE",
+    icon: "public/icons/context-menu/add-service-account/gitlab.png",
+  },
+  {
+    id: "add-service-account-gitee",
+    label: "Gitee",
+    icon: "public/icons/context-menu/add-service-account/gitee.png",
+    enabled: false
+  },
+  {
+    id: "add-service-account-coding",
+    label: "Coding",
+    icon: "public/icons/context-menu/add-service-account/coding.png",
+    enabled: false
+  },
+  {
+    id: "add-service-account-bitbucket",
+    label: "Bitbucket",
+    icon: "public/icons/context-menu/add-service-account/bitbucket.png",
+    enabled: false
+  },
+  {
+    id: "add-service-account-bitbucket-server",
+    label: "Bitbucket Server",
+    icon: "public/icons/context-menu/add-service-account/bitbucket.png",
+    enabled: false
+  }
+]
+
+const showAddContextMenu = (e: PointerEvent) => {
+  common_bridge.showContextMenu(currentSelectExplorerType.value === "LocalRepos" ? addLocalReposButtonContextMenuTemplate : addServiceAccountButtonContextMenuTemplate, e.clientX, e.clientY)
+}
+
+const addGroupToLocalRepoExplorer = () => localRepositoryStore.addGroup("/")
+
+
+onMounted(() => {
+  contextMenuCallbackEventListener.addEventListener("local-repo-explorer-add-group", addGroupToLocalRepoExplorer)
+})
 </script>
 
 <style scoped>

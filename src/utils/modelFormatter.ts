@@ -2,7 +2,7 @@ import { FogUserInfo } from "../types/IUserInfo";
 import { IGitHubUserInfo } from "../message/github";
 import { IGitlabEvent, IGitlabGroup, IGitlabUserInfo } from "../message/GitLab";
 import { IGitHubRepository } from "../types/githubRepo";
-import { FogRepository } from "../types/Repository";
+import { FogRepository } from "../types/CloudRepository";
 import { IGitlabRepository } from "../types/gitlabRepo";
 
 class ModelFormatter {

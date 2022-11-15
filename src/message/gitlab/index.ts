@@ -1,5 +1,5 @@
 import axios from "axios";
-import { FogRepository } from "../../types/Repository";
+import { FogRepository } from "../../types/CloudRepository";
 import { AxiosInstanceWrapper } from "..";
 import { IGitlabRepository } from "../../types/gitlabRepo";
 import { FogUserInfo } from "../../types/IUserInfo";

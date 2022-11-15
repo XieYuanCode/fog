@@ -1,5 +1,5 @@
 import { AxiosInstance } from "axios";
-import { FogRepository } from "../types/Repository";
+import { FogRepository } from "../types/CloudRepository";
 import { FogUserInfo } from "../types/IUserInfo";
 // import { FogGroup } from "../model/FogGroup";
 // import { IFogEvent } from "../model/IFogEvent";

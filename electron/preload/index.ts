@@ -32,5 +32,8 @@ contextBridge.exposeInMainWorld('git_bridge', {
 contextBridge.exposeInMainWorld("common_bridge", {
   getPath: (key: string) => ipcRenderer.sendSync("Common:GetPath", key),
   showOpenDialogSync: (options: OpenDialogSyncOptions) => ipcRenderer.sendSync("Common:showOpenDialogSync", options),
-  openExternal: (address: string) => ipcRenderer.send("Common:OpenExternal", address)
+  openExternal: (address: string) => ipcRenderer.send("Common:OpenExternal", address),
+  showContextMenu: (...args) => ipcRenderer.send("Common:ShowContextMenu", ...args),
+  onContextMenuClicked: (callback) => ipcRenderer.on('Common:ContextMenuClicked', callback),
+  confirm: (title: string, message: string, detail: string) => ipcRenderer.invoke("Common:Confirm", title, message, detail)
 })

@@ -3,6 +3,7 @@ import ch from "./ch"
 import en from './en'
 
 const i18n = createI18n({
+  legacy: false,
   locale: 'en',
   messages: {
     en,

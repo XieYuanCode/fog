@@ -42,6 +42,17 @@ const en = {
   tooltip: {
     explorer_switch_local_repo_radio: "Switch To Local Repositories Explorer",
     explorer_switch_service_account_radio: "Switch To Service Accounts Explorer",
+  },
+  context_menu: {
+    local_repo_explorer_add_btn: {
+      add_group: "New Group",
+      add_repo: "Add Existing Git Repository",
+      create_repo: "Create New Git Repository",
+      clone_repo: "Clone Git Repository"
+    },
+    service_account_explorer_add_btn: {
+      
+    }
   }
 }
 

@@ -1,7 +1,7 @@
 import axios from "axios";
 import { IGitHubRepository } from "../../types/githubRepo";
 import { FogUserInfo } from "../../types/IUserInfo";
-import { FogRepository } from "../../types/Repository";
+import { FogRepository } from "../../types/CloudRepository";
 import { AxiosInstanceWrapper } from "..";
 import modelFormatter from "../../utils/modelFormatter";
 
