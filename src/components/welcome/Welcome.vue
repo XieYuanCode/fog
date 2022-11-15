@@ -3,7 +3,7 @@
     <div class="move-window-content h-6 w-full absolute top-0 left-0 "></div>
     <div class="welcome-view-main-container w-full h-full flex">
       <div class="welcome-view-left-container w-4/6 h-full box-border p-10">
-        <Transition name="fade">
+        <Transition :name="fadeDirection">
           <div v-if="currentStep === 0" key="description" class="welcome-description welcome-item-panel absolute">
             <span class="extra-large-text">Welcome Page</span>
           </div>
@@ -32,7 +32,8 @@
             </ElForm>
           </div>
           <div v-else-if="currentStep === 2" key="Git" class="welcome-git welcome-item-panel absolute">
-            <ElAlert type="error" v-if="!gitGlobalInformation.isInstalled" :closable="false" :style="{margin: '10px 0px'}">
+            <ElAlert type="error" v-if="!gitGlobalInformation.isInstalled" :closable="false"
+              :style="{ margin: '10px 0px' }">
               {{ $t("welcome.git.git_not_installed_tip") }}
             </ElAlert>
             <span class="extra-large-text">{{ $t('welcome.git.git_setting_title') }}</span>
@@ -58,10 +59,13 @@
             </div>
           </div>
         </Transition>
-        <span class="git-version-label extra-small-text absolute bottom-5" :style="{ right: '366px' }"
-          v-if="currentStep === 2 && gitGlobalInformation.isInstalled">{{
-              gitGlobalInformation.version
-          }}</span>
+        <Transition :name="fadeDirection">
+          <span class="git-version-label extra-small-text absolute bottom-5" :style="{ right: '366px' }"
+            v-if="currentStep === 2 && gitGlobalInformation.isInstalled">{{
+                gitGlobalInformation.version
+            }}</span>
+        </Transition>
+
       </div>
       <div class="welcome-view-right-container w-2/6 h-full" :style="{
         boxShadow: `var(--el-box-shadow-dark)`,
@@ -100,12 +104,7 @@ import { ServiceAccountType } from "../../types/ServiceAccountType"
 import { ThemeType } from "../../types/theme"
 import { getAvailableServiceAccountTypes } from "../../utils/serviceAccount"
 import AddServiceAccountCard from "../common/serviceAccount/AddServiceAccountCard.vue"
-import {
-  ArrowLeft,
-  ArrowRight,
-  User,
-  Message
-} from '@element-plus/icons-vue'
+import { ArrowLeft, ArrowRight, User, Message } from '@element-plus/icons-vue'
 
 const isLoadingGitGlobalUsername = ref(true)
 const isLoadingGitEmailAddress = ref(true)
@@ -176,20 +175,24 @@ const onNameChanged = () => { git_bridge.setGlobalUsername(gitGlobalInformation.
 const onEmailChanged = () => { git_bridge.setGlobalEmailAddress(gitGlobalInformation.emailAddress) }
 
 const nextStep = () => {
+  fadeDirection.value = "fade-forward";
   if (currentStep.value < 3) {
     currentStep.value++
   } else {
-    // window_bridge.goToHome()
+    window_bridge.goToHome()
   }
 
   carouselElement.value.next()
 }
 
 const prevStep = () => {
+  fadeDirection.value = "fade-backward";
   if (currentStep.value > 0) currentStep.value--
 
   carouselElement.value.prev()
 }
+
+const fadeDirection = ref("fade-forward")
 </script>
 
 
@@ -200,21 +203,6 @@ const prevStep = () => {
 
 .welcome-carousel-image {
   -webkit-user-drag: none;
-}
-
-.fade-enter-active,
-.fade-leave-active {
-  transition: all 0.25s ease-out;
-}
-
-.fade-enter-from {
-  opacity: 0;
-  transform: translateX(30px);
-}
-
-.fade-leave-to {
-  opacity: 0;
-  transform: translateX(-30px);
 }
 
 .git-version-label {

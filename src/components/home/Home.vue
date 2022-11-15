@@ -1,62 +1,59 @@
 <template>
   <div class="home-view w-full h-full">
     <div class="move-window-content h-6 w-full absolute top-0 left-0 "></div>
-    <FogLayout class="w-full h-full">
-      <FogLayoutSider :resize-directions="['right']" class="home-left-panel h-full pt-5 ">
-        <FogRadioGroup type="button" size="mini" class="switch-explorer-view-radio absolute top-5 right-5"
-          v-model="currentSelectExplorerType">
-          <FogRadio value="ServiceAccount">
-            <IconCloud />
-          </FogRadio>
-          <FogRadio value="LocalRepos">
-            <IconDesktop />
-          </FogRadio>
-        </FogRadioGroup>
-        <Transition name="fade">
-          <Explorer class="git-repo explorer mt-8 absolute h-5/6 overflow-y-scroll" v-if="currentSelectExplorerType === 'LocalRepos'">
-          </Explorer>
-          <div class="asd mt-8 absolute" v-else>ServiceAccounts</div>
+    <ElContainer class="home-main-container h-full">
+      <ElAside width="250px" class="home-aside box-border flex flex-col items-end p-2 justify-start relative overflow-x-hidden">
+        <ElRadioGroup v-model="currentSelectExplorerType" size="small">
+          <ElTooltip :content="$t('tooltip.explorer_switch_local_repo_radio')" placement="bottom" :show-after="1000">
+            <ElRadioButton label="LocalRepos" @mousedown="fadeDirection = 'fade-backward'">
+              <ElIcon>
+                <Monitor />
+              </ElIcon>
+            </ElRadioButton>
+          </ElTooltip>
+          <ElTooltip :content="$t('tooltip.explorer_switch_service_account_radio')" placement="bottom"
+            :show-after="1000">
+            <ElRadioButton label="ServiceAccounts" @mousedown="fadeDirection = 'fade-forward'">
+              <ElIcon>
+                <MostlyCloudy />
+              </ElIcon>
+            </ElRadioButton>
+          </ElTooltip>
+        </ElRadioGroup>
+        <Transition :name="fadeDirection">
+          <LocalRepoExplorer v-if="currentSelectExplorerType === 'LocalRepos'"
+            class="local-repo-explorer absolute mt-10 left-0"></LocalRepoExplorer>
+          <ServiceAccountExplorer v-else class="service-account-explorer absolute mt-10 left-0">
+          </ServiceAccountExplorer>
         </Transition>
-      </FogLayoutSider>
-      <FogLayoutContent class="home-right-panel h-full">Content</FogLayoutContent>
-    </FogLayout>
+        <div class="explorer-footer absolute bottom-0 right-0 w-full">
+          <div class="explorer-footer-actions w-full h-full p-3 box-border flex justify-between items-center">
+            <ElButton :icon="Setting" circle></ElButton>
+            <ElButton :icon="Plus" circle></ElButton>
+          </div>
+        </div>
+      </ElAside>
+      <ElContainer>
+        <ElHeader height="45px" class="home-toolbox w-full bg-blue-100">ElHeader</ElHeader>
+        <ElMain class="home-main w-full h-full bg-green-100">ElMain</ElMain>
+      </ElContainer>
+    </ElContainer>
   </div>
 </template>
 
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
-import Explorer from "../explorer/Explorer.vue"
+import LocalRepoExplorer from "../explorer/LocalRepoExplorer.vue"
+import ServiceAccountExplorer from "../explorer/ServiceAccountExplorer.vue"
+import { Monitor, MostlyCloudy, Setting, Plus } from "@element-plus/icons-vue";
 
 const currentSelectExplorerType = ref("LocalRepos")
+
+const fadeDirection = ref("fade-forward")
 </script>
 
 <style scoped>
 .home-view {
-  color: var(--color-text-2);
-}
-
-.home-left-panel {
-  max-width: 400px;
-  min-width: 240px;
-  background: var(--color-bg-2) !important;
-}
-
-.home-right-panel {
-  background: var(--color-bg-2-1) !important;
-}
-
-.fade-enter-active,
-.fade-leave-active {
-  transition: all 0.15s ease-out;
-}
-
-.fade-enter-from {
-  opacity: 0;
-  transform: translateX(30px);
-}
-
-.fade-leave-to {
-  opacity: 0;
-  transform: translateX(-30px);
+  background-color: var(--el-bg-color);
 }
 </style>

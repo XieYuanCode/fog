@@ -38,6 +38,10 @@ const en = {
         pat_label_text: "Personal Access Token"
       }
     }
+  },
+  tooltip: {
+    explorer_switch_local_repo_radio: "Switch To Local Repositories Explorer",
+    explorer_switch_service_account_radio: "Switch To Service Accounts Explorer",
   }
 }
 

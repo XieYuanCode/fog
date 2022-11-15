@@ -69,6 +69,8 @@ class WindowManager {
       this.mainWindow.loadURL(this._baseDevelopUrl)
     }
 
+    this.mainWindow.webContents.openDevTools()
+
     return this.mainWindow;
   }
 
@@ -91,26 +93,13 @@ class WindowManager {
       this.welcomeWindow.loadURL(`${this._baseDevelopUrl}#/welcome`)
     }
 
-    this.welcomeWindow.webContents.openDevTools()
+    // this.welcomeWindow.webContents.openDevTools()
 
     return this.welcomeWindow;
   }
 
   public createAddServiceAccountWindow(type: ServiceAccountType, parent: "welcome" | 'main'): BrowserWindow {
     if (this.addServiceAccountWindow) {
-      // if (app.isPackaged) {
-      //   this.addServiceAccountWindow.loadFile(this._baseIndexHtmlAddress + `/#/${type}`).then(() => {
-      //     this.addServiceAccountWindow.reload()
-      //     this.addServiceAccountWindow.show()
-      //   })
-      // } else {
-      //   this.addServiceAccountWindow.loadURL(`${this._baseDevelopUrl}#/${type}`).then(() => {
-      //     this.addServiceAccountWindow.reload()
-      //     this.addServiceAccountWindow.show()
-      //   })
-      // }
-
-      // return this.addServiceAccountWindow;
       return
     }
 

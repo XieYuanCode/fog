@@ -38,6 +38,10 @@ const ch = {
         pat_label_text: "个人访问令牌"
       }
     }
+  },
+  tooltip: {
+    explorer_switch_local_repo_radio: "切换到本地仓库导航栏",
+    explorer_switch_service_account_radio: "切换到账户导航栏",
   }
 }
 

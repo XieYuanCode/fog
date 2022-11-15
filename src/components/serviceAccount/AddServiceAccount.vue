@@ -9,7 +9,8 @@
     <ElButton class="absolute right-24 bottom-5 z-50" round plain size="small" @click="closeWindow">
       {{ $t("dialog.add_service_account.cancel_btn_text") }}
     </ElButton>
-    <ElButton class="absolute right-5 bottom-5 z-50" round type="primary" size="small" @click="addAccount">
+    <ElButton class="absolute right-5 bottom-5 z-50" round type="primary" size="small" @click="addAccount"
+      :disabled="authenticationStatus === 'Authorizing...'">
       {{ $t("dialog.add_service_account.confirm_btn_text") }}
     </ElButton>
   </div>
@@ -20,7 +21,7 @@ import { ServiceAccountType } from '../../types/ServiceAccountType';
 import { useRouter } from 'vue-router';
 import AddGithubServiceAccountVue from './AddGithubServiceAccount.vue';
 import AddGitlabceeeServiceAccountVue from './AddGitlabceeeServiceAccount.vue';
-import { ref, computed } from 'vue';
+import { ref } from 'vue';
 import type { AxiosError } from 'axios';
 
 const router = useRouter();
@@ -34,7 +35,7 @@ const closeWindow = () => {
 }
 
 const addAccount = async () => {
-  authenticationStatus.value = "Authorizing"
+  authenticationStatus.value = "Authorizing..."
 
   try {
     await addServiceAccountFormRef.value.addAccount();

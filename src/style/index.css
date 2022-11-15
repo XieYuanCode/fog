@@ -27,6 +27,7 @@ body,
 :root {
   --el-bg-color: rgba(255, 255, 255, 0.8)
 }
+
 html.dark:root {
   --el-bg-color: rgba(0, 0, 0, 0.8)
 }
@@ -40,7 +41,44 @@ html.dark:root {
   font-size: var(--el-font-size-extra-small);
 }
 
+.light-color-text {
+  opacity: 0.4;
+}
+
+.fade-forward-enter-active,
+.fade-forward-leave-active,
+.fade-backward-enter-active,
+.fade-backward-leave-active {
+  transition: all 0.25s ease-out;
+}
+
+.fade-forward-enter-from {
+  opacity: 0;
+  transform: translateX(30px);
+}
+
+.fade-forward-leave-to {
+  opacity: 0;
+  transform: translateX(-30px);
+}
+
+.fade-backward-enter-from {
+  opacity: 0;
+  transform: translateX(-30px);
+}
+
+.fade-backward-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
+}
+
 /*Welcome View*/
 .welcome-carousel .el-carousel__container {
   height: 100%;
+}
+
+/* Modified Element Default Style */
+.el-divider__text,
+.el-tree {
+  background-color: unset !important;
 }

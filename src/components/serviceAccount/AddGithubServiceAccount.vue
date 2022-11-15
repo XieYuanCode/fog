@@ -1,30 +1,23 @@
 <template>
   <div class="add-service-account p-5 relative">
-    <div class="header-text ml-4">GitHub</div>
-    <FogTrigger position="left" :unmount-on-close="false" :popup-translate="[-10, 0]">
-      <IconQuestion class="help-icon absolute right-5 top-5" />
-      <template #content>
-        <div class="hover-tip">
-          this is help text
-        </div>
-      </template>
-    </FogTrigger>
-    <FogForm :model="githubInfo" :style="{ width: '550px' }" :label-col-props="{ span: 8, offset: 0 }"
-      :wrapper-col-props="{ span: 14, offset: 0 }" size="mini">
-      <FogFormItem field="name" :label="$t('dialog.add_service_account.github.name_label_text')">
-        <FogInput size="mini" v-model="githubInfo.name" />
-      </FogFormItem>
-      <FogFormItem field="pat" :label="$t('dialog.add_service_account.github.pat_label_text')">
-        <FogInput size="mini" v-model="githubInfo.pat" type="password" />
-      </FogFormItem>
-    </FogForm>
+    <div class="extra-large-text header-text ml-4">GitHub</div>
+    <ElForm :model="githubInfo" size="small" label-width="180" label-position="right">
+      <ElFormItem :label="$t('dialog.add_service_account.github.name_label_text')">
+        <ElInput size="small" v-model="githubInfo.name" :prefix-icon="User" />
+      </ElFormItem>
+      <ElFormItem :label="$t('dialog.add_service_account.github.pat_label_text')">
+        <ElInput size="small" v-model="githubInfo.pat" type="password" :prefix-icon="Lock" />
+      </ElFormItem>
+    </ElForm>
   </div>
 </template>
 
 <script setup lang="ts">
 import { FogUserInfo } from "../../types/IUserInfo";
-import { computed, reactive } from "vue";
+import { reactive } from "vue";
 import githubAxiosInstanceFactory, { IGitHubUserInfo } from "../../message/Github"
+import { Lock, User } from '@element-plus/icons-vue'
+
 
 const githubInfo = reactive({
   host: "https://github.com",
@@ -50,9 +43,6 @@ defineExpose({ addAccount })
 }
 
 .header-text {
-  color: var(--color-text-2);
-  font-size: 24px;
-  font-weight: bold;
   margin-bottom: 20px;
 }
 </style>
