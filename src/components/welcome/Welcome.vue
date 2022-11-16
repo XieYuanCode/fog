@@ -17,8 +17,8 @@
               </ElFormItem>
               <ElFormItem :label="$t('welcome.general.color_theme_label')">
                 <ElRadioGroup size="small" v-model="appearanceStore.theme" @change="themeChanged">
-                  <ElRadioButton label="Light">{{ $t('welcome.general.color_theme_light') }}</ElRadioButton>
-                  <ElRadioButton label="Dark">{{ $t('welcome.general.color_theme_dark') }}</ElRadioButton>
+                  <ElRadioButton label="Light" disabled>{{ $t('welcome.general.color_theme_light') }}</ElRadioButton>
+                  <ElRadioButton label="Dark" disabled>{{ $t('welcome.general.color_theme_dark') }}</ElRadioButton>
                   <ElRadioButton label="System">{{ $t('welcome.general.color_theme_system') }}</ElRadioButton>
                 </ElRadioGroup>
                 <ElLink class="system-theme-link ml-5" @click="openSystemColorTheme">System Color Theme</ElLink>
@@ -152,16 +152,14 @@ const languageChanged = (language: 'en' | 'ch') => preferenceStore.setLanguage(l
 
 const selectDefaultClonedDirectory = () => {
   const selected = common_bridge.showOpenDialogSync({
-    title: '123',
+    title: 'Select Default Cloned Directory',
     properties: ["openDirectory", "createDirectory"]
   }) as string[] | undefined
 
   selected && preferenceStore.setDefaultCloneUrl(selected[0])
 }
 
-const openSystemColorTheme = () => {
-  common_bridge.openExternal("x-apple.systempreferences://")
-}
+const openSystemColorTheme = () => common_bridge.openExternal("x-apple.systempreferences://")
 
 const onNameChanged = () => { git_bridge.setGlobalUsername(gitGlobalInformation.name) }
 
@@ -190,9 +188,6 @@ const fadeDirection = ref("fade-forward")
 
 
 <style scoped>
-.welcome-view {
-  background-color: var(--el-bg-color);
-}
 
 .welcome-carousel-image {
   -webkit-user-drag: none;

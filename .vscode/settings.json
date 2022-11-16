@@ -16,6 +16,7 @@
     "pinia",
     "Sider",
     "systempreferences",
+    "unmanage",
     "vueuse"
   ]
 }

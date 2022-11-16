@@ -25,11 +25,15 @@ body,
 
 /* Global Vss Vars */
 :root {
-  --el-bg-color: rgba(255, 255, 255, 0.8)
+  --el-bg-color: rgba(255, 255, 255, 0);
+  --el-bg-color-1: rgba(255, 255, 255, 0.4);
+  --el-bg-color-2: rgba(255, 255, 255, 0.8);
 }
 
 html.dark:root {
-  --el-bg-color: rgba(0, 0, 0, 0)
+  --el-bg-color: rgba(0, 0, 0, 0);
+  --el-bg-color-1: rgba(0, 0, 0, 0.4);
+  --el-bg-color-2: rgba(0, 0, 0, 0.8);
 }
 
 /* Common Class */

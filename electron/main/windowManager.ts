@@ -15,7 +15,6 @@ class WindowManager {
     return BrowserWindow.getFocusedWindow()
   }
 
-
   private _distDir = join(__dirname, '..', "../dist")
   private _publicDir = app.isPackaged ? this._distDir : join(__dirname, '..', '../public')
 
@@ -40,6 +39,13 @@ class WindowManager {
       spellcheck: false,
       devTools: true
     }
+  }
+
+  private _preventWindowClose(window: BrowserWindow) {
+    window.on("close", e => {
+      e.preventDefault()
+      window.hide()
+    })
   }
 
   /**
@@ -69,7 +75,9 @@ class WindowManager {
       this.mainWindow.loadURL(this._baseDevelopUrl)
     }
 
-    this.mainWindow.webContents.openDevTools()
+    this._preventWindowClose(this.mainWindow)
+
+    // this.mainWindow.webContents.openDevTools()
 
     return this.mainWindow;
   }
@@ -84,6 +92,7 @@ class WindowManager {
       height: 600,
       resizable: false,
       fullscreenable: false,
+      center: true,
       ...this._basicWindowOption
     })
 
@@ -93,7 +102,7 @@ class WindowManager {
       this.welcomeWindow.loadURL(`${this._baseDevelopUrl}#/welcome`)
     }
 
-    // this.welcomeWindow.webContents.openDevTools()
+    this._preventWindowClose(this.welcomeWindow)
 
     return this.welcomeWindow;
   }
@@ -124,9 +133,47 @@ class WindowManager {
     return this.addServiceAccountWindow;
   }
 
+  public createSettingWindow(): BrowserWindow {
+    if (this.settingWindow) {
+      this.settingWindow.show()
+      return;
+    }
+
+    this.settingWindow = new BrowserWindow({
+      width: 1000,
+      height: 600,
+      resizable: false,
+      fullscreenable: false,
+      center: true,
+      ...this._basicWindowOption
+    })
+
+    if (app.isPackaged) {
+      this.settingWindow.loadFile(this._baseIndexHtmlAddress + "/#/setting")
+    } else {
+      this.settingWindow.loadURL(`${this._baseDevelopUrl}#/setting`)
+    }
+
+    this._preventWindowClose(this.settingWindow)
+
+    this.settingWindow.webContents.openDevTools()
+
+    return this.settingWindow
+  }
+
   public killAllWindows() {
     this._mainWindowState.unmanage()
-    this.mainWindow = null;
+    this.mainWindow && this.mainWindow.close()
+    this.mainWindow && (this.mainWindow = null)
+
+    this.welcomeWindow && this.welcomeWindow.close()
+    this.welcomeWindow && (this.welcomeWindow = null)
+
+    this.settingWindow && this.settingWindow.close()
+    this.settingWindow && (this.settingWindow = null)
+
+    this.addServiceAccountWindow && this.addServiceAccountWindow.close()
+    this.addServiceAccountWindow && (this.addServiceAccountWindow = null)
   }
 }
 

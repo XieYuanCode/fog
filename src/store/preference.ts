@@ -9,6 +9,7 @@ export const usePreferenceStore = defineStore<"preference", IPreferenceStoreStat
     return {
       defaultCloneUrl: electronStore.get("preference.defaultCloneUrl", common_bridge.getPath('home')),
       language: electronStore.get("preference.language", 'en'),
+      openOnLogin: electronStore.get("preference.onOnLogin", false)
     }
   },
   actions: {
@@ -20,6 +21,10 @@ export const usePreferenceStore = defineStore<"preference", IPreferenceStoreStat
       this.language = language
       electronStore.set('preference.language', language)
       i18n.global.locale = language;
+    },
+    setOpenOnLogin(openOnLogin: boolean) {
+      this.openOnLogin = openOnLogin
+      electronStore.set("preference.onOnLogin", openOnLogin)
     },
   }
 })

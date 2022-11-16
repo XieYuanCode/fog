@@ -18,9 +18,8 @@ app.whenReady().then(() => {
   setAsDefaultProtocolClient()
 
   windowManager.createMainWindow(); //创建主窗口
+  windowManager.createSettingWindow()
   const isFirstLoad = store.get('isFirstLoad', true) //是否第一次加载应用
-
-  console.log(isFirstLoad);
 
   if (isFirstLoad) {
     windowManager.createWelcomeWindow();
@@ -32,16 +31,14 @@ app.whenReady().then(() => {
 
 app.on('window-all-closed', () => {
   windowManager.killAllWindows();
+  console.log("window-all-closed");
   if (process.platform !== 'darwin') app.quit()
 })
 
-// app.on('second-instance', () => {
-//   if (win) {
-//     // Focus on the main window if the user tried to open another
-//     if (win.isMinimized()) win.restore()
-//     win.focus()
-//   }
-// })
+app.on('quit', () => {
+  console.log("quite");
+  windowManager.killAllWindows()
+})
 
 app.on('activate', () => {
   const allWindows = BrowserWindow.getAllWindows()
@@ -51,21 +48,3 @@ app.on('activate', () => {
     windowManager.createMainWindow(); //创建主窗口
   }
 })
-
-// new window example arg: new windows url
-// ipcMain.handle('open-win', (event, arg) => {
-//   const childWindow = new BrowserWindow({
-//     webPreferences: {
-//       preload,
-//       nodeIntegration: true,
-//       contextIsolation: false,
-//     },
-//   })
-
-//   if (app.isPackaged) {
-//     childWindow.loadFile(indexHtml, { hash: arg })
-//   } else {
-//     childWindow.loadURL(`${url}#${arg}`)
-//     // childWindow.webContents.openDevTools({ mode: "undocked", activate: true })
-//   }
-// })

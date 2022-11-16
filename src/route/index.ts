@@ -3,6 +3,7 @@ import { createRouter, createWebHashHistory } from "vue-router";
 import Welcome from "../components/welcome/Welcome.vue";
 import Home from "../components/home/Home.vue";
 import AddServiceAccount from "../components/serviceAccount/AddServiceAccount.vue"
+import Setting from "../components/setting/Setting.vue"
 
 import type { RouteRecordRaw } from "vue-router";
 
@@ -15,6 +16,9 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path: '/addServiceAccount/:type', component: AddServiceAccount
+  },
+  {
+    path: '/setting', component: Setting
   }
 ]
 

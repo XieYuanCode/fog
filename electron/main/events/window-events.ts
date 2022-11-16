@@ -12,19 +12,21 @@ const initWindowEvents = () => {
     store.set("isFirstLoad", false)
   })
 
-  ipcMain.handle("Window:OpenAddServiceAccountWindow", async (event, type: ServiceAccountType, parent: 'welcome' | 'main') => {
-    return new Promise((resolve, reject) => {
-      windowManager.createAddServiceAccountWindow(type, parent)
-      resolve(null)
-    })
+  ipcMain.on("Window:OpenAddServiceAccountWindow", (event, type: ServiceAccountType, parent: 'welcome' | 'main') => {
+    windowManager.createAddServiceAccountWindow(type, parent)
   })
 
-  ipcMain.handle("Window:closeAddServiceAccountWindow", async (event) => {
-    return new Promise((resolve, reject) => {
-      windowManager.addServiceAccountWindow.close()
-      windowManager.addServiceAccountWindow = null;
-      resolve(null)
-    })
+  ipcMain.on("Window:closeAddServiceAccountWindow", (event) => {
+    windowManager.addServiceAccountWindow.close()
+    windowManager.addServiceAccountWindow = null;
+  })
+
+  ipcMain.on("Window:OpenSetting", () => {
+    if (windowManager.settingWindow) {
+      windowManager.settingWindow.show()
+    } else {
+      windowManager.createSettingWindow()
+    }
   })
 }
 export default initWindowEvents

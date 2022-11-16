@@ -98,6 +98,7 @@ onMounted(() => {
   contextMenuCallbackEventListener.addEventListener("local-repo-explorer-sort-name", sortByName)
   contextMenuCallbackEventListener.addEventListener("local-repo-explorer-sort-type", sortByType)
 })
+
 </script>
 
 <style scoped>

@@ -1,22 +1,22 @@
 <template>
   <div class="home-view w-full h-full">
     <div class="move-window-content h-6 w-full absolute top-0 left-0 "></div>
-    <ElContainer class="home-main-container h-full">
+    <ElContainer class="home-container h-full">
       <ElAside width="250px"
         class="home-aside box-border flex flex-col items-end p-2 justify-start relative overflow-x-hidden">
         <ElRadioGroup v-model="currentSelectExplorerType" size="small">
-          <ElTooltip :content="$t('tooltip.explorer_switch_local_repo_radio')" placement="bottom" :show-after="1000">
-            <ElRadioButton label="LocalRepos" @mousedown="fadeDirection = 'fade-backward'">
-              <ElIcon>
-                <Monitor />
-              </ElIcon>
-            </ElRadioButton>
-          </ElTooltip>
           <ElTooltip :content="$t('tooltip.explorer_switch_service_account_radio')" placement="bottom"
             :show-after="1000">
             <ElRadioButton label="ServiceAccounts" @mousedown="fadeDirection = 'fade-forward'">
               <ElIcon>
                 <MostlyCloudy />
+              </ElIcon>
+            </ElRadioButton>
+          </ElTooltip>
+          <ElTooltip :content="$t('tooltip.explorer_switch_local_repo_radio')" placement="bottom" :show-after="1000">
+            <ElRadioButton label="LocalRepos" @mousedown="fadeDirection = 'fade-backward'">
+              <ElIcon>
+                <Monitor />
               </ElIcon>
             </ElRadioButton>
           </ElTooltip>
@@ -29,14 +29,15 @@
         </Transition>
         <div class="explorer-footer absolute bottom-0 right-0 w-full">
           <div class="explorer-footer-actions w-full h-full p-3 box-border flex justify-between items-center">
-            <ElButton :icon="Setting" circle size="small"></ElButton>
+            <ElButton :icon="Setting" circle size="small" @click="openSetting"></ElButton>
             <ElButton :icon="Plus" circle size="small" @click="showAddContextMenu"></ElButton>
           </div>
         </div>
       </ElAside>
-      <ElContainer>
+      <ElContainer class="home-main-container">
         <ElHeader height="45px" class="home-toolbox w-full ">ElHeader</ElHeader>
         <ElMain class="home-main w-full h-full ">
+          <ElProgress :percentage="30" :stroke-width="1" :show-text="false"></ElProgress>
           {{ localRepositoryStore.groups.length }}
 
         </ElMain>
@@ -135,6 +136,10 @@ const addServiceAccountButtonContextMenuTemplate = [
   }
 ]
 
+const openSetting = () => {
+  window_bridge.openSetting()
+}
+
 const showAddContextMenu = (e: PointerEvent) => {
   common_bridge.showContextMenu(currentSelectExplorerType.value === "LocalRepos" ? addLocalReposButtonContextMenuTemplate : addServiceAccountButtonContextMenuTemplate, e.clientX, e.clientY)
 }
@@ -149,6 +154,19 @@ onMounted(() => {
 
 <style scoped>
 .home-view {
-  background-color: var(--el-bg-color);
+  /*  */
+}
+
+.home-main-container {
+  background-color: var(--el-bg-color-2);
+}
+
+.home-aside {
+  border-right: 1px solid var(--el-border-color);
+  background-color: var(--el-bg-color-1);
+}
+
+.home-main {
+  border-top: 1px solid var(--el-border-color);
 }
 </style>
