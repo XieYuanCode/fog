@@ -46,7 +46,7 @@ const en = {
   context_menu: {
     local_repo_explorer_add_btn: {
       add_group: "New Group",
-      add_repo: "Add Existing Git Repository",
+      add_repo: "Add Git Repository",
       create_repo: "Create New Git Repository",
       clone_repo: "Clone Git Repository"
     },

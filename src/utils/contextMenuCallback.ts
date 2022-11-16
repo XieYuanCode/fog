@@ -8,6 +8,7 @@ class ContextMenuCallbackEventListener {
   }
 
   private onContextMenuClicked(commandID: string) {
+    console.log("onContextMenuClicked, commandID: ", commandID);
     const [commandType, id] = commandID.split("_")
 
     const event = new CustomEvent(commandType, {

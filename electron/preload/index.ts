@@ -28,6 +28,12 @@ contextBridge.exposeInMainWorld('git_bridge', {
   setGlobalUsername: (name: string) => ipcRenderer.invoke('Git:SetGlobalUsername', [name]),
   setGlobalEmailAddress: (email: string) => ipcRenderer.invoke('Git:SetGlobalEmailAddress', [email]),
   //#endregion
+  //#region common
+  checkIsRepo: (location: string) => ipcRenderer.invoke("Git:Common:CheckIsRepo", [location]),
+  //#endregion
+  //#region Integration
+  importLocalGitRepo: () => ipcRenderer.invoke("Git:Integration:importLocalGitRepo")
+  //#endregion
 })
 
 contextBridge.exposeInMainWorld("common_bridge", {
@@ -36,5 +42,6 @@ contextBridge.exposeInMainWorld("common_bridge", {
   openExternal: (address: string) => ipcRenderer.send("Common:OpenExternal", address),
   showContextMenu: (...args) => ipcRenderer.send("Common:ShowContextMenu", ...args),
   onContextMenuClicked: (callback) => ipcRenderer.on('Common:ContextMenuClicked', callback),
-  confirm: (title: string, message: string, detail: string) => ipcRenderer.invoke("Common:Confirm", title, message, detail)
+  confirm: (title: string, message: string, detail: string) => ipcRenderer.invoke("Common:Confirm", title, message, detail),
+  setOpenOnLogin: (openOnLogin: boolean) => ipcRenderer.send("Common:SetOpenOnLogin", openOnLogin)
 })

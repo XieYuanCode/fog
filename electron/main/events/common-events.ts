@@ -48,6 +48,11 @@ const initCommonEvents = () => {
 
     return result;
   })
+  ipcMain.on("Common:SetOpenOnLogin", (_, openOnLogin: boolean) => {
+    app.setLoginItemSettings({
+      openAtLogin: openOnLogin
+    })
+  })
 }
 
 export default initCommonEvents;

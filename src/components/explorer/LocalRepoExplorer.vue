@@ -16,16 +16,16 @@
       <div class="local-repo-main-explorer-header flex w-full items-center justify-between">
         <span class="extra-small-text light-color-text">Repositories</span>
         <div class="local-repo-main-explorer-header-actions">
-          <ElTooltip content="Clear All Invalid Repositories" :show-after="1000">
+          <!-- <ElTooltip content="Clear All Invalid Repositories" :show-after="1000"> -->
             <ElIcon>
               <Delete class="extra-small-text light-color-text" @click="deleteAllInvalidRepositories" />
             </ElIcon>
-          </ElTooltip>
-          <ElTooltip content="Sort" :show-after="1000">
+          <!-- </ElTooltip> -->
+          <!-- <ElTooltip content="Sort" :show-after="1000"> -->
             <ElIcon>
               <Sort class="extra-small-text light-color-text" @click="showSortContextMenu" />
             </ElIcon>
-          </ElTooltip>
+          <!-- </ElTooltip> -->
         </div>
       </div>
       <ElTree :data="localRepositoryStore.localRepositoriesTreeData" class="local-repo-main-tree"
@@ -57,14 +57,16 @@ onUnmounted(() => {
 })
 
 const searchText = ref("")
-const repositoryItemContextMenuTemplate = [{
-  label: "pin"
-}]
 
-const repositoryGroupItemContextMenuTemplate = [{ label: "group" }]
 
-const pinedRepositoryItemContextMenuTemplate = [{ label: "unpin" }]
 const showContextMenu = (event: PointerEvent, node: any) => {
+  const repositoryItemContextMenuTemplate = [{
+    id: `local-repo-explorer-pin_${node.id}`,
+    label: "pin"
+  }]
+
+  const repositoryGroupItemContextMenuTemplate = [{ label: "group" }]
+
   common_bridge.showContextMenu(node.children ? repositoryGroupItemContextMenuTemplate : repositoryItemContextMenuTemplate, event.clientX, event.clientY)
 }
 
@@ -83,6 +85,11 @@ const showSortContextMenu = (event: PointerEvent) => {
 }
 
 const showPinedContextMenu = (event: PointerEvent, node: any) => {
+  const pinedRepositoryItemContextMenuTemplate = [{
+    id: `local-repo-explorer-unpin_${node.id}`,
+    label: "unpin"
+  }]
+
   common_bridge.showContextMenu(pinedRepositoryItemContextMenuTemplate, event.clientX, event.clientY)
 }
 
@@ -93,10 +100,23 @@ const deleteAllInvalidRepositories = async () => {
 
 const sortByName = () => localRepositoryStore.sortByName()
 const sortByType = () => localRepositoryStore.sortByType()
+const pinRepo = (event: any) => {
+  const repoID = event.detail.split("_")[1]
+  if (!repoID) return
+  localRepositoryStore.pinRepo(repoID)
+}
+
+const unpinRepo = (event: any) => {
+  const repoID = event.detail.split("_")[1]
+  if (!repoID) return
+  localRepositoryStore.unPinRepo(repoID)
+}
 
 onMounted(() => {
   contextMenuCallbackEventListener.addEventListener("local-repo-explorer-sort-name", sortByName)
   contextMenuCallbackEventListener.addEventListener("local-repo-explorer-sort-type", sortByType)
+  contextMenuCallbackEventListener.addEventListener("local-repo-explorer-pin", pinRepo)
+  contextMenuCallbackEventListener.addEventListener("local-repo-explorer-unpin", unpinRepo)
 })
 
 </script>

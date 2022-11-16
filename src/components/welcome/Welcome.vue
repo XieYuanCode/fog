@@ -26,7 +26,7 @@
               <ElFormItem :label="$t('welcome.general.language_label')">
                 <ElRadioGroup size="small" v-model="preferenceStore.language" @change="languageChanged">
                   <ElRadioButton label="en">English</ElRadioButton>
-                  <ElRadioButton label="ch">简体中文</ElRadioButton>
+                  <ElRadioButton label="ch" disabled>简体中文</ElRadioButton>
                 </ElRadioGroup>
               </ElFormItem>
             </ElForm>

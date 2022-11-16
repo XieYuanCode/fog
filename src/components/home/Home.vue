@@ -5,21 +5,21 @@
       <ElAside width="250px"
         class="home-aside box-border flex flex-col items-end p-2 justify-start relative overflow-x-hidden">
         <ElRadioGroup v-model="currentSelectExplorerType" size="small">
-          <ElTooltip :content="$t('tooltip.explorer_switch_service_account_radio')" placement="bottom"
-            :show-after="1000">
-            <ElRadioButton label="ServiceAccounts" @mousedown="fadeDirection = 'fade-forward'">
-              <ElIcon>
-                <MostlyCloudy />
-              </ElIcon>
-            </ElRadioButton>
-          </ElTooltip>
-          <ElTooltip :content="$t('tooltip.explorer_switch_local_repo_radio')" placement="bottom" :show-after="1000">
-            <ElRadioButton label="LocalRepos" @mousedown="fadeDirection = 'fade-backward'">
-              <ElIcon>
-                <Monitor />
-              </ElIcon>
-            </ElRadioButton>
-          </ElTooltip>
+          <!-- <ElTooltip :content="$t('tooltip.explorer_switch_service_account_radio')" placement="bottom" -->
+          <!-- :show-after="1000"> -->
+          <ElRadioButton label="ServiceAccounts" @mousedown="fadeDirection = 'fade-forward'">
+            <ElIcon>
+              <MostlyCloudy />
+            </ElIcon>
+          </ElRadioButton>
+          <!-- </ElTooltip> -->
+          <!-- <ElTooltip :content="$t('tooltip.explorer_switch_local_repo_radio')" placement="bottom" :show-after="1000"> -->
+          <ElRadioButton label="LocalRepos" @mousedown="fadeDirection = 'fade-backward'">
+            <ElIcon>
+              <Monitor />
+            </ElIcon>
+          </ElRadioButton>
+          <!-- </ElTooltip> -->
         </ElRadioGroup>
         <Transition :name="fadeDirection">
           <LocalRepoExplorer v-if="currentSelectExplorerType === 'LocalRepos'"
@@ -36,10 +36,8 @@
       </ElAside>
       <ElContainer class="home-main-container">
         <ElHeader height="45px" class="home-toolbox w-full ">ElHeader</ElHeader>
-        <ElMain class="home-main w-full h-full ">
-          <ElProgress :percentage="30" :stroke-width="1" :show-text="false"></ElProgress>
-          {{ localRepositoryStore.groups.length }}
-
+        <ElMain class="home-main w-full h-full p-0">
+          <ElProgress :percentage="0" :stroke-width="1" :show-text="false"></ElProgress>
         </ElMain>
       </ElContainer>
     </ElContainer>
@@ -67,6 +65,10 @@ const addLocalReposButtonContextMenuTemplate = [
   {
     id: "local-repo-explorer-add-group",
     label: t("context_menu.local_repo_explorer_add_btn.add_group"),
+  },
+  {
+    id: "local-repo-explorer-attach-local-directory",
+    label: "Attach Local Directory",
   },
   {
     type: "separator",
@@ -145,18 +147,24 @@ const showAddContextMenu = (e: PointerEvent) => {
 }
 
 const addGroupToLocalRepoExplorer = () => localRepositoryStore.addGroup("/")
+const importNewGitRepo = () => {
+  git_bridge.importLocalGitRepo().then(result => {
+    if (result.type === "canceled") return
+
+    if (result.type === "success") {
+      localRepositoryStore.addLocalRepository(result.location, result.name, "/")
+    }
+  })
+}
 
 
 onMounted(() => {
   contextMenuCallbackEventListener.addEventListener("local-repo-explorer-add-group", addGroupToLocalRepoExplorer)
+  contextMenuCallbackEventListener.addEventListener("local-repo-explorer-add-repo", importNewGitRepo)
 })
 </script>
 
 <style scoped>
-.home-view {
-  /*  */
-}
-
 .home-main-container {
   background-color: var(--el-bg-color-2);
 }

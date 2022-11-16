@@ -24,7 +24,8 @@
     "vite": "^3.1.4",
     "vite-electron-plugin": "^0.4.6",
     "vue": "^3.2.40",
-    "vue-tsc": "^0.40.13"
+    "vue-tsc": "^0.40.13",
+    "@types/mousetrap": "^1.6.11"
   },
   "debug": {
     "env": {
@@ -39,7 +40,6 @@
     "vue"
   ],
   "dependencies": {
-    "@types/mousetrap": "^1.6.11",
     "@vueuse/core": "^9.5.0",
     "axios": "^1.1.3",
     "electron-store": "^8.1.0",

@@ -25,6 +25,7 @@ export const usePreferenceStore = defineStore<"preference", IPreferenceStoreStat
     setOpenOnLogin(openOnLogin: boolean) {
       this.openOnLogin = openOnLogin
       electronStore.set("preference.onOnLogin", openOnLogin)
+      common_bridge.setOpenOnLogin(openOnLogin)
     },
   }
 })
