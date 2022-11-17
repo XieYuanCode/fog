@@ -147,6 +147,13 @@ const showAddContextMenu = (e: PointerEvent) => {
 }
 
 const addGroupToLocalRepoExplorer = () => localRepositoryStore.addGroup("/")
+const addAttachedGroupToLocalRepoExplorer = async () => {
+  git_bridge.attachFolder().then(result => {
+    if (result.type === "canceled") return
+
+    localRepositoryStore.addAttachedGroup("/", result.location, result.name)
+  })
+}
 const importNewGitRepo = () => {
   git_bridge.importLocalGitRepo().then(result => {
     if (result.type === "canceled") return
@@ -160,6 +167,7 @@ const importNewGitRepo = () => {
 
 onMounted(() => {
   contextMenuCallbackEventListener.addEventListener("local-repo-explorer-add-group", addGroupToLocalRepoExplorer)
+  contextMenuCallbackEventListener.addEventListener("local-repo-explorer-attach-local-directory", addAttachedGroupToLocalRepoExplorer)
   contextMenuCallbackEventListener.addEventListener("local-repo-explorer-add-repo", importNewGitRepo)
 })
 </script>

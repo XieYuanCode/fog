@@ -16,6 +16,7 @@ export interface ILocalRepositoryStoreAction {
   sortByName: () => void
   sortByType: () => void
   addGroup: (explorer_location: string) => void
+  addAttachedGroup: (explorer_location: string, attachDirectory: string, name: string) => void
   pinRepo: (repoID: string) => void
   unPinRepo: (repoID: string) => void
 }

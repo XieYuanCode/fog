@@ -32,7 +32,8 @@ contextBridge.exposeInMainWorld('git_bridge', {
   checkIsRepo: (location: string) => ipcRenderer.invoke("Git:Common:CheckIsRepo", [location]),
   //#endregion
   //#region Integration
-  importLocalGitRepo: () => ipcRenderer.invoke("Git:Integration:importLocalGitRepo")
+  importLocalGitRepo: () => ipcRenderer.invoke("Git:Integration:ImportLocalGitRepo"),
+  attachFolder: () => ipcRenderer.invoke("Git:Integration:AttachFolder")
   //#endregion
 })
 

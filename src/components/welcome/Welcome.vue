@@ -60,12 +60,17 @@
           </div>
         </Transition>
         <Transition :name="fadeDirection">
-          <span class="git-version-label extra-small-text absolute bottom-5" :style="{ right: '366px' }"
+          <span class="light-color-text extra-small-text absolute bottom-5" :style="{ right: '366px' }"
             v-if="currentStep === 2 && gitGlobalInformation.isInstalled">{{
                 gitGlobalInformation.version
             }}</span>
         </Transition>
-
+        <Transition :name="fadeDirection">
+          <span class="light-color-text extra-small-text absolute bottom-5" :style="{ right: '366px' }"
+            v-if="currentStep === 1">
+            Theme and Chinese are not supported in the beta version yet, please modify the system color theme
+          </span>
+        </Transition>
       </div>
       <div class="welcome-view-right-container w-2/6 h-full" :style="{
         boxShadow: `var(--el-box-shadow-dark)`,
@@ -104,7 +109,7 @@ import { ServiceAccountType } from "../../types/ServiceAccountType"
 import { ThemeType } from "../../types/theme"
 import { getAvailableServiceAccountTypes } from "../../utils/serviceAccount"
 import AddServiceAccountCard from "../common/serviceAccount/AddServiceAccountCard.vue"
-import { ArrowLeft, ArrowRight, User, Message } from '@element-plus/icons-vue'
+import { ArrowLeft, ArrowRight, User, Message, Warning } from '@element-plus/icons-vue'
 
 const isLoadingGitGlobalUsername = ref(true)
 const isLoadingGitEmailAddress = ref(true)
@@ -188,13 +193,8 @@ const fadeDirection = ref("fade-forward")
 
 
 <style scoped>
-
 .welcome-carousel-image {
   -webkit-user-drag: none;
-}
-
-.git-version-label {
-  right: 366px;
 }
 
 .welcome-item-panel {

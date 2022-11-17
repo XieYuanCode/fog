@@ -1,5 +1,5 @@
 <template>
-  <div class="setting-window w-full h-full p-5 box-border">
+  <div class="setting-window w-full h-full p-5 box-border select-none">
     <div class="move-window-content h-6 w-full absolute top-0 left-0"></div>
     <ElTabs v-model="activeSettingTab" class="setting-window-tabs w-full h-full">
       <ElTabPane label="General" name="General" class="setting-window-tab-pane w-full h-full">
@@ -11,10 +11,9 @@
             <span>General</span>
           </div>
         </template>
-        <div class="setting-panel-content">
-          <ElForm :model="preferenceStore" size="small" class="welcome-form mt-10" label-width="150"
-            label-position="right">
-            
+        <div class="setting-panel-content relative">
+          <ElForm :model="preferenceStore" size="small" class="setting-form" label-width="150" label-position="right">
+
             <!-- 登陆时打开 -->
             <ElFormItem label="Open On Login">
               <ElRadioGroup size="small" v-model="preferenceStore.openOnLogin" @change="openOnLoginChanged">
@@ -36,7 +35,17 @@
             </ElFormItem>
 
           </ElForm>
-          <ElDivider>General | {{ preferenceStore.language }}</ElDivider>
+          <span class="extra-small-text light-color-text absolute right-1 bottom-8 flex items-center">
+            <ElIcon class="mr-1" color="#E6A23C">
+              <Warning />
+            </ElIcon>
+            Chinese are not supported in the beta version yet
+          </span>
+          <div class="divider-content flex justify-around items-center w-full">
+            <ElDivider :style="{ width: '43%' }"></ElDivider>
+            General | {{ preferenceStore.language }}
+            <ElDivider :style="{ width: '43%' }"></ElDivider>
+          </div>
         </div>
       </ElTabPane>
       <ElTabPane label="Git" name="Git" class="setting-window-tab-pane w-full h-full">
@@ -48,6 +57,14 @@
             <span>Git</span>
           </div>
         </template>
+        <div class="setting-panel-content relative">
+          Git
+          <div class="divider-content flex justify-around items-center w-full">
+            <ElDivider :style="{ width: '45%' }"></ElDivider>
+            Git 
+            <ElDivider :style="{ width: '45%' }"></ElDivider>
+          </div>
+        </div>
       </ElTabPane>
       <ElTabPane label="Theme" name="Theme" class="setting-window-tab-pane w-full h-full">
         <template #label>
@@ -58,6 +75,14 @@
             <span>Theme</span>
           </div>
         </template>
+        <div class="setting-panel-content relative">
+          Theme
+          <div class="divider-content flex justify-around items-center w-full">
+            <ElDivider :style="{ width: '40%' }"></ElDivider>
+            Theme | System 
+            <ElDivider :style="{ width: '40%' }"></ElDivider>
+          </div>
+        </div>
       </ElTabPane>
       <ElTabPane label="Shortcut" name="Shortcut" class="setting-window-tab-pane w-full h-full">
         <template #label>
@@ -68,6 +93,14 @@
             <span>Shortcut</span>
           </div>
         </template>
+        <div class="setting-panel-content relative">
+          Shortcut
+          <div class="divider-content flex justify-around items-center w-full">
+            <ElDivider :style="{ width: '40%' }"></ElDivider>
+            Shortcut 
+            <ElDivider :style="{ width: '40%' }"></ElDivider>
+          </div>
+        </div>
       </ElTabPane>
       <ElTabPane label="Integration" name="Integration" class="setting-window-tab-pane w-full h-full">
         <template #label>
@@ -78,6 +111,14 @@
             <span>Integration</span>
           </div>
         </template>
+        <div class="setting-panel-content relative">
+          Integration
+          <div class="divider-content flex justify-around items-center w-full">
+            <ElDivider :style="{ width: '40%' }"></ElDivider>
+            Integration 
+            <ElDivider :style="{ width: '40%' }"></ElDivider>
+          </div>
+        </div>
       </ElTabPane>
       <ElTabPane label="Update" name="Update" class="setting-window-tab-pane w-full h-full">
         <template #label>
@@ -88,6 +129,14 @@
             <span>Update</span>
           </div>
         </template>
+        <div class="setting-panel-content relative">
+          Update
+          <div class="divider-content flex justify-around items-center w-full">
+            <ElDivider :style="{ width: '40%' }"></ElDivider>
+            Update 
+            <ElDivider :style="{ width: '40%' }"></ElDivider>
+          </div>
+        </div>
       </ElTabPane>
       <ElTabPane label="About" name="About" class="setting-window-tab-pane w-full h-full">
         <template #label>
@@ -98,6 +147,14 @@
             <span>About</span>
           </div>
         </template>
+        <div class="setting-panel-content relative">
+          About
+          <div class="divider-content flex justify-around items-center w-full">
+            <ElDivider :style="{ width: '40%' }"></ElDivider>
+            About 
+            <ElDivider :style="{ width: '40%' }"></ElDivider>
+          </div>
+        </div>
       </ElTabPane>
     </ElTabs>
   </div>
@@ -137,11 +194,16 @@ const openOnLoginChanged = (openOnLogin: boolean) => preferenceStore.setOpenOnLo
 }
 
 .setting-panel-content {
-  width: 80%;
+  width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
+}
+
+.setting-form {
+  margin-top: 20px;
+  margin-left: -400px;
 }
 </style>

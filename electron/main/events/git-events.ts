@@ -1,11 +1,12 @@
-import { dialog, ipcMain } from "electron"
+import { dialog, ipcMain, Notification } from "electron"
 import { fork } from "child_process"
 import { GitExecutorMessageDescriptor } from "../git/GitExecutorMessageDescriptor"
-import { join, basename } from "path"
+import { join, basename, dirname } from "path"
 import { GitExecuteResult } from "../git/GitExtcuteResult";
 import { uuid } from "../common";
 import { gitExecutorAction } from "../types/gitExecutorAction";
 import windowManager from "../windowManager";
+import globby from "globby";
 
 const git_child_process = fork(join(__dirname, '../', 'git', 'index'))
 
@@ -51,7 +52,7 @@ const initGitEvents = () => {
     return await exec('checkIsRepo', args)
   })
 
-  ipcMain.handle("Git:Integration:importLocalGitRepo", async (_) => {
+  ipcMain.handle("Git:Integration:ImportLocalGitRepo", async (_) => {
     const selectDirectoryResult = await dialog.showOpenDialog(windowManager.currentActiveWindow || windowManager.mainWindow, {
       title: "Select A Git Directory",
       properties: ['openDirectory']
@@ -97,6 +98,64 @@ const initGitEvents = () => {
           type: "success",
           location: selectedFilePath,
           name: basename(selectedFilePath)
+        }
+      }
+    } catch (error) {
+      throw error
+    }
+  })
+
+  ipcMain.handle("Git:Integration:AttachFolder", async (_) => {
+    const selectDirectoryResult = await dialog.showOpenDialog(windowManager.currentActiveWindow || windowManager.mainWindow, {
+      title: "Select A Git Directory",
+      properties: ['openDirectory']
+    })
+
+    if (selectDirectoryResult.canceled) {
+      return {
+        type: "canceled"
+      }
+    }
+
+    const selectedDirectoryPath = selectDirectoryResult.filePaths[0]
+
+    const isSelectedDirectoryGitRepo = await exec('checkIsRepo', [selectDirectoryResult.filePaths[0]])
+
+    if (isSelectedDirectoryGitRepo) {
+      new Notification({
+        title: 'Attach Directory Failed!',
+        body: `The directory you selected is a git repository, can not attach it`
+      }).show()
+      return {
+        type: "canceled"
+      }
+    }
+
+    try {
+      const patterns = [join(selectedDirectoryPath, "**", ".git"), `!${join(selectedDirectoryPath, "**", "node_modules", "**")}`];
+
+      const gitRepos = await globby(patterns, { onlyDirectories: true, deep: 4 })
+
+      const { response } = await dialog.showMessageBox(windowManager.currentActiveWindow || windowManager.mainWindow, {
+        title: "Attach Directory",
+        message: `Find ${gitRepos.length} Git Repositories`,
+        detail: `Find ${gitRepos.length} git repositories, do you need to import them?`,
+        buttons: ["OK", "Cancel"]
+      })
+
+      if (response === 1) {
+        return {
+          type: "canceled"
+        }
+      } else if (response === 0) {
+        return {
+          type: "success",
+          location: selectedDirectoryPath,
+          name: basename(selectedDirectoryPath),
+          repos: gitRepos.map(gitRepo => ({
+            location: gitRepo,
+            name: basename(dirname(gitRepo))
+          }))
         }
       }
     } catch (error) {

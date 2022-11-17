@@ -4,7 +4,22 @@ import type { _GettersTree } from "pinia";
 import { GitRepository } from "../types/GitRepository";
 import { sendNotification } from "../utils/notifications";
 import electronStore from "../utils/electronStore";
+import { createGroupTreeItem, createRepoTreeItem } from "../utils/treeFactory";
+import { ILocalRepoGroupViewModel } from "../types/ILocalRepoGroupViewModel";
 
+const parseRepoExplorerLocation = (repo: GitRepository) => {
+
+}
+const parseGroupExplorerLocation = (groups: ILocalRepoGroupViewModel[]) => {
+  let result = []
+
+  groups.forEach(group => {
+    if (group.explorer_location === "/") {
+      result.push(createGroupTreeItem(group))
+    }
+  })
+
+}
 export const useLocalRepositoryStore = defineStore<"localRepository", ILocalRepositoryStoreState, _GettersTree<ILocalRepositoryStoreGetter>, ILocalRepositoryStoreAction>('localRepository', {
   state: () => {
     return {
@@ -17,13 +32,22 @@ export const useLocalRepositoryStore = defineStore<"localRepository", ILocalRepo
     localRepositoriesTreeData: (state: ILocalRepositoryStoreState) => {
       let result: any = []
 
-      state.localRepositories.forEach(localRepository => {
-        const treeItem = {
-          label: localRepository.name,
-          id: localRepository.id
+      state.groups.forEach(group => {
+        if (group.explorer_location === "/") {
+          const groupItem = createGroupTreeItem(group)
+          result.push(groupItem)
+        } else {
+          const paths = group.explorer_location.split("/")
         }
+      })
 
-        result.push(treeItem)
+      state.localRepositories.forEach(localRepository => {
+        if (localRepository.explorer_location === "/") {
+          const treeItem = createRepoTreeItem(localRepository)
+          result.push(treeItem)
+        } else {
+          const addresses = localRepository.explorer_location.split("/").splice(0, 1)
+        }
       })
 
       return result;
@@ -34,10 +58,7 @@ export const useLocalRepositoryStore = defineStore<"localRepository", ILocalRepo
 
       if (!pinedRepos) return
       pinedRepos.forEach(pinedRepo => {
-        const treeItem = {
-          label: pinedRepo.name,
-          id: pinedRepo.id
-        }
+        const treeItem = createRepoTreeItem(pinedRepo)
 
         result.push(treeItem)
       })
@@ -67,9 +88,14 @@ export const useLocalRepositoryStore = defineStore<"localRepository", ILocalRepo
       electronStore.set("localRepository.localRepositories", JSON.parse(JSON.stringify(this.localRepositories)))
     },
     addGroup(explorer_location: string) {
-      this.groups.push({ label: "New Group", explorer_location })
+      this.groups.push({ label: "New Group", explorer_location, type: 'normal' })
 
-      electronStore.set("localRepository.groups", this.groups)
+      electronStore.set("localRepository.groups", JSON.parse(JSON.stringify(this.groups)))
+    },
+    addAttachedGroup(explorer_location: string, attachDirectory: string, name: string) {
+      this.groups.push({ label: name, explorer_location, type: 'attach', attachDirectory })
+
+      electronStore.set("localRepository.groups", JSON.parse(JSON.stringify(this.groups)))
     },
     sortByName() {
       // TODO: sort

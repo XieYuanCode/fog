@@ -1,7 +1,6 @@
 <template>
   <div class="add-service-account-card rounded cursor-pointer relative flex flex-col justify-center items-center"
     :class="{ 'add-service-account-card-disabled': !props.info.available }" @click="onClicked">
-    <div class="add-service-account-card-mark absolute left-0 top-0 rounded" v-if="!props.info.available"></div>
     <GithubIcon
       v-if="props.info.type === ServiceAccountType.Github || props.info.type === ServiceAccountType.GithubEnterprise"
       :size="35"></GithubIcon>
@@ -44,6 +43,7 @@ const onClicked = () => {
   width: 130px;
   height: 70px;
   margin: 5px;
+  border: 1px solid var(--el-border-color-darker);
   border-radius: var(--el-border-radius-base);
   box-shadow: var(--el-box-shadow-light)
 }
