@@ -1,4 +1,4 @@
-import { app, ipcMain, dialog, shell, Menu, Notification } from "electron";
+import { app, ipcMain, dialog, shell, Menu, clipboard } from "electron";
 import type { OpenDialogSyncOptions } from "electron"
 import windowManager from "../windowManager";
 
@@ -52,6 +52,9 @@ const initCommonEvents = () => {
     app.setLoginItemSettings({
       openAtLogin: openOnLogin
     })
+  })
+  ipcMain.handle("Common:ReadClipboard", async (_) => { 
+    return clipboard.readText()
   })
 }
 

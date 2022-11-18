@@ -10,6 +10,7 @@ class WindowManager {
   public addServiceAccountWindow: BrowserWindow | null = null //添加服务账号窗口
   public settingWindow: BrowserWindow | null = null //设置窗口
   public quickOpenWindow: BrowserWindow | null = null //快速启动窗口
+  public cloneGitWindow: BrowserWindow | null = null //克隆窗口
 
   public get currentActiveWindow(): BrowserWindow {
     return BrowserWindow.getFocusedWindow()
@@ -77,7 +78,7 @@ class WindowManager {
 
     this._preventWindowClose(this.mainWindow)
 
-    this.mainWindow.webContents.openDevTools()
+    // this.mainWindow.webContents.openDevTools()
 
     return this.mainWindow;
   }
@@ -113,11 +114,9 @@ class WindowManager {
     }
 
     this.addServiceAccountWindow = new BrowserWindow({
-      width: 600,
-      height: 280,
-      parent: parent === 'main' ? this.mainWindow : this.welcomeWindow,
-      modal: true,
-      movable: false,
+      width: 640,
+      height: 480,
+      movable: true,
       resizable: false,
       ...this._basicWindowOption
     })
@@ -128,7 +127,7 @@ class WindowManager {
       this.addServiceAccountWindow.loadURL(`${this._baseDevelopUrl}#/addServiceAccount/${type}`)
     }
 
-    this.addServiceAccountWindow.show()
+    this.addServiceAccountWindow.once('ready-to-show', () => this.addServiceAccountWindow.show())
 
     return this.addServiceAccountWindow;
   }
@@ -161,6 +160,34 @@ class WindowManager {
     return this.settingWindow
   }
 
+  public createCloneGitWindow(): BrowserWindow {
+    if (this.cloneGitWindow) {
+      this.cloneGitWindow.show()
+      return;
+    }
+
+    this.cloneGitWindow = new BrowserWindow({
+      width: 640,
+      height: 480,
+      resizable: false,
+      roundedCorners: true,
+      ...this._basicWindowOption
+    })
+
+    if (app.isPackaged) {
+      this.cloneGitWindow.loadFile(this._baseIndexHtmlAddress + `/#/clone`)
+    } else {
+      this.cloneGitWindow.loadURL(`${this._baseDevelopUrl}#/clone`)
+    }
+
+    this.cloneGitWindow.once('ready-to-show', () => this.cloneGitWindow.show())
+    this.cloneGitWindow.on('close', () => this.cloneGitWindow = null)
+
+    this.cloneGitWindow.webContents.openDevTools()
+
+    return this.cloneGitWindow
+  }
+
   public killAllWindows() {
     this._mainWindowState.unmanage()
     this.mainWindow && this.mainWindow.close()
@@ -174,6 +201,12 @@ class WindowManager {
 
     this.addServiceAccountWindow && this.addServiceAccountWindow.close()
     this.addServiceAccountWindow && (this.addServiceAccountWindow = null)
+
+    this.quickOpenWindow && this.quickOpenWindow.close()
+    this.quickOpenWindow && (this.quickOpenWindow = null)
+
+    this.cloneGitWindow && this.cloneGitWindow.close()
+    this.cloneGitWindow && (this.cloneGitWindow = null)
   }
 }
 

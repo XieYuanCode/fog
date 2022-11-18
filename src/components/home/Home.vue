@@ -85,7 +85,7 @@ const addLocalReposButtonContextMenuTemplate = [
     type: "separator",
   },
   {
-    id: "local-repo-explorer-clone-repo",
+    id: "local-repo-explorer-clone-git-repo",
     label: t('context_menu.local_repo_explorer_add_btn.clone_repo')
   }
 ]
@@ -164,11 +164,27 @@ const importNewGitRepo = () => {
   })
 }
 
+const createNewGitRepo = () => {
+  git_bridge.createLocalGitRepo().then(result => {
+    if (result.type === "canceled") return
+
+    if (result.type === "success") {
+      localRepositoryStore.addLocalRepository(result.location, result.name, "/")
+    }
+  })
+}
+
+const cloneGitRepo = () => { 
+  window_bridge.openGitCloneWindow()
+}
+
 
 onMounted(() => {
   contextMenuCallbackEventListener.addEventListener("local-repo-explorer-add-group", addGroupToLocalRepoExplorer)
   contextMenuCallbackEventListener.addEventListener("local-repo-explorer-attach-local-directory", addAttachedGroupToLocalRepoExplorer)
   contextMenuCallbackEventListener.addEventListener("local-repo-explorer-add-repo", importNewGitRepo)
+  contextMenuCallbackEventListener.addEventListener("local-repo-explorer-create-repo", createNewGitRepo)
+  contextMenuCallbackEventListener.addEventListener("local-repo-explorer-clone-git-repo", cloneGitRepo)
 })
 </script>
 

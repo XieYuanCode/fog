@@ -58,7 +58,7 @@ const initGitEvents = () => {
 
   ipcMain.handle("Git:Integration:ImportLocalGitRepo", async (_) => {
     const selectDirectoryResult = await dialog.showOpenDialog(windowManager.currentActiveWindow || windowManager.mainWindow, {
-      title: "Select A Git Directory",
+      title: "Add Git Repository",
       properties: ['openDirectory']
     })
 
@@ -180,6 +180,42 @@ const initGitEvents = () => {
       branches: result[1],
       tags: result[2],
       submodules: result[3]
+    }
+  })
+
+  ipcMain.handle("Git:Integration:CreateLocalGitRepo", async (_) => {
+    const selectDirectoryResult = await dialog.showOpenDialog(windowManager.currentActiveWindow || windowManager.mainWindow, {
+      title: "Create New Git Repository",
+      properties: ['openDirectory', 'createDirectory']
+    })
+
+    if (selectDirectoryResult.canceled) {
+      return {
+        type: "canceled"
+      }
+    }
+
+    const selectedFilePath = selectDirectoryResult.filePaths[0]
+
+    try {
+      const isGitRepo = await exec('checkIsRepo', [selectedFilePath])
+
+      if (!isGitRepo.isSuccess) {
+        throw isGitRepo.error
+      }
+
+      if (isGitRepo.result === true) {
+        dialog.showErrorBox("Create New Git Repository Failed!", "The directory you choose is already a Git repository")
+      } else {
+        await exec('init', [selectedFilePath])
+        return {
+          type: "success",
+          location: selectedFilePath,
+          name: basename(selectedFilePath)
+        }
+      }
+    } catch (error) {
+      throw error
     }
   })
 }

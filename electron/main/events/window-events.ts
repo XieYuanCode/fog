@@ -28,5 +28,12 @@ const initWindowEvents = () => {
       windowManager.createSettingWindow()
     }
   })
+
+  ipcMain.on("Window:OpenGitCloneWindow", (_) => windowManager.createCloneGitWindow())
+  ipcMain.on("Window:CloseGitCloneWindow", (_) => {
+    windowManager.cloneGitWindow.close()
+    windowManager.cloneGitWindow = null;
+  })
+
 }
 export default initWindowEvents

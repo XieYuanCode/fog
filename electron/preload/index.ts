@@ -6,7 +6,9 @@ contextBridge.exposeInMainWorld('window_bridge', {
   goToHome: () => ipcRenderer.send('Window:GoToHome'),
   openAddServiceAccountWindow: (type: ServiceAccountType, parent: 'welcome' | "main") => ipcRenderer.send("Window:OpenAddServiceAccountWindow", type, parent),
   closeAddServiceAccountWindow: () => ipcRenderer.send("Window:closeAddServiceAccountWindow"),
-  openSetting: () => ipcRenderer.send("Window:OpenSetting")
+  openSetting: () => ipcRenderer.send("Window:OpenSetting"),
+  openGitCloneWindow: () => ipcRenderer.send('Window:OpenGitCloneWindow'),
+  closeGitCloneWindow: () => ipcRenderer.send('Window:CloseGitCloneWindow')
 })
 
 contextBridge.exposeInMainWorld("store_bridge", {
@@ -33,6 +35,7 @@ contextBridge.exposeInMainWorld('git_bridge', {
   //#endregion
   //#region Integration
   importLocalGitRepo: () => ipcRenderer.invoke("Git:Integration:ImportLocalGitRepo"),
+  createLocalGitRepo: () => ipcRenderer.invoke("Git:Integration:CreateLocalGitRepo"),
   attachFolder: () => ipcRenderer.invoke("Git:Integration:AttachFolder"),
   getRepoGitInfo: (location: string) => ipcRenderer.invoke("Git:Integration:GetRepoBasicGitInfo", [location])
   //#endregion
@@ -45,5 +48,6 @@ contextBridge.exposeInMainWorld("common_bridge", {
   showContextMenu: (...args) => ipcRenderer.send("Common:ShowContextMenu", ...args),
   onContextMenuClicked: (callback) => ipcRenderer.on('Common:ContextMenuClicked', callback),
   confirm: (title: string, message: string, detail: string) => ipcRenderer.invoke("Common:Confirm", title, message, detail),
-  setOpenOnLogin: (openOnLogin: boolean) => ipcRenderer.send("Common:SetOpenOnLogin", openOnLogin)
+  setOpenOnLogin: (openOnLogin: boolean) => ipcRenderer.send("Common:SetOpenOnLogin", openOnLogin),
+  readClipboard: () => ipcRenderer.invoke("Common:ReadClipboard")
 })
