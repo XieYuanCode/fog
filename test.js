@@ -1,16 +1,17 @@
-const globby = require("globby")
-const path = require("path")
+const { simpleGit } = require("simple-git")
 
-const selectedFilePath = "/Users/xieyuan/code"
+const gitRepo = simpleGit("/Users/xieyuan/code/fog")
 
-const patterns = [path.join(selectedFilePath, "**", ".git"), `!${path.join(selectedFilePath, "**", "node_modules", "**")}`];
+const tasks = [
+  gitRepo.status(),
+  gitRepo.branch(),
+  // gitRepo.tag(),
+  // gitRepo.subModule()
+];
 
 (async () => {
-  const result = await globby(patterns, {
-    onlyDirectories: true,
-    deep: 4
-  })
-
-  console.log(result.length);
+  console.time("test")
+  const result = await Promise.all(tasks)
   console.log(result);
+  console.timeEnd("test");
 })()

@@ -21,6 +21,15 @@
   ],
   "configurations": [
     {
+      "name": "Run Test JS",
+      "program": "${workspaceFolder}/test.js",
+      "request": "launch",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "type": "node"
+    },
+    {
       "name": "Debug Main Process",
       "type": "pwa-node",
       "request": "launch",

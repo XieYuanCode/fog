@@ -48,6 +48,10 @@ const initGitEvents = () => {
     return await exec('setGlobalEmailAddress', args)
   })
 
+  ipcMain.handle("Git:Status:GetStatus", async (_, args) => {
+    return await exec('getStatus', args)
+  })
+
   ipcMain.handle("Git:Common:CheckIsRepo", async (_, args) => {
     return await exec('checkIsRepo', args)
   })
@@ -160,6 +164,22 @@ const initGitEvents = () => {
       }
     } catch (error) {
       throw error
+    }
+  })
+
+  ipcMain.handle("Git:Integration:GetRepoBasicGitInfo", async (_, args) => {
+    const getStatusTask = exec('getStatus', args)
+    const getBranchesTask = exec('getBranches', args)
+    const getTagsTask = exec('getTags', args)
+    const getSubmodules = exec('getSubModules', args)
+
+    const result = await Promise.all([getStatusTask, getBranchesTask, getTagsTask, getSubmodules])
+
+    return {
+      status: result[0],
+      branches: result[1],
+      tags: result[2],
+      submodules: result[3]
     }
   })
 }

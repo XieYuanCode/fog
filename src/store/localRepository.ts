@@ -20,6 +20,7 @@ const parseGroupExplorerLocation = (groups: ILocalRepoGroupViewModel[]) => {
   })
 
 }
+
 export const useLocalRepositoryStore = defineStore<"localRepository", ILocalRepositoryStoreState, _GettersTree<ILocalRepositoryStoreGetter>, ILocalRepositoryStoreAction>('localRepository', {
   state: () => {
     return {
@@ -72,7 +73,9 @@ export const useLocalRepositoryStore = defineStore<"localRepository", ILocalRepo
 
       if (isExist) {
         // TODO: send notification
-        sendNotification(`Repository: ${name} Was Already Existing`)
+        sendNotification(`Add Git Repository Failed`, {
+          body: `Repository: ${name} Was Already Existing`,
+        })
         return
       }
 
@@ -81,6 +84,13 @@ export const useLocalRepositoryStore = defineStore<"localRepository", ILocalRepo
       this.localRepositories.push(localGitRepository)
 
       electronStore.set("localRepository.localRepositories", JSON.parse(JSON.stringify(this.localRepositories)))
+
+      git_bridge.getRepoGitInfo(location).then(result => {
+        result.branches.isSuccess === true && this.updateRepoBranches(localGitRepository.id, result.branches.result)
+        result.status.isSuccess === true && this.updateRepoStatus(localGitRepository.id, result.status.result)
+        result.tags.isSuccess === true && this.updateRepoTags(localGitRepository.id, result.tags.result)
+        result.submodules.isSuccess === true && this.updateRepoSubmodules(localGitRepository.id, result.submodules.result)
+      })
     },
     deleteAllInvalidRepositories() {
       this.localRepositories = this.localRepositories.filter(localRepository => localRepository.available === true)
@@ -93,6 +103,16 @@ export const useLocalRepositoryStore = defineStore<"localRepository", ILocalRepo
       electronStore.set("localRepository.groups", JSON.parse(JSON.stringify(this.groups)))
     },
     addAttachedGroup(explorer_location: string, attachDirectory: string, name: string) {
+      const isExist = this.groups.find(group => (group.type === 'attach' && group.attachDirectory === attachDirectory))
+
+      if (isExist) {
+        sendNotification(`Attach Local Directory Failed`, {
+          body: `The directory you selected is already attached, please do not reattach`
+        })
+
+        return
+      }
+
       this.groups.push({ label: name, explorer_location, type: 'attach', attachDirectory })
 
       electronStore.set("localRepository.groups", JSON.parse(JSON.stringify(this.groups)))
@@ -121,6 +141,37 @@ export const useLocalRepositoryStore = defineStore<"localRepository", ILocalRepo
       if (!target) return
 
       target.pined = false;
+      electronStore.set("localRepository.localRepositories", JSON.parse(JSON.stringify(this.localRepositories)))
+    },
+    updateRepoBranches(repoID, branches) {
+      const target = this.localRepositories.find(repo => repo.id === repoID)
+      if (!target) return
+
+      target.branches = branches;
+      electronStore.set("localRepository.localRepositories", JSON.parse(JSON.stringify(this.localRepositories)))
+    },
+
+    updateRepoStatus(repoID, status) {
+      const target = this.localRepositories.find(repo => repo.id === repoID)
+      if (!target) return
+
+      target.status = status;
+      electronStore.set("localRepository.localRepositories", JSON.parse(JSON.stringify(this.localRepositories)))
+    },
+
+    updateRepoTags(repoID, tags) {
+      const target = this.localRepositories.find(repo => repo.id === repoID)
+      if (!target) return
+
+      target.tags = tags;
+      electronStore.set("localRepository.localRepositories", JSON.parse(JSON.stringify(this.localRepositories)))
+    },
+
+    updateRepoSubmodules(repoID, submodulesString) {
+      const target = this.localRepositories.find(repo => repo.id === repoID)
+      if (!target) return
+
+      target.setSubmodulesByString(submodulesString)
       electronStore.set("localRepository.localRepositories", JSON.parse(JSON.stringify(this.localRepositories)))
     },
   }

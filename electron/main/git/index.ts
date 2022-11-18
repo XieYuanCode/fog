@@ -3,6 +3,10 @@ import { getGitVersion, getGlobalEmailAddress, getGlobalUsername, setGlobalEmail
 import { GitExecuteResult } from "./GitExtcuteResult";
 import { checkIsRepo } from "./common";
 import { init } from "./initialization";
+import { getStatus } from "./status";
+import { getBranches } from "./branch";
+import { getTags } from "./tag";
+import { getSubModules } from "./submodule";
 
 const sendSuccessResult = (id: string, result: unknown) => {
   process.send(new GitExecuteResult(true, id, result, null))
@@ -40,6 +44,27 @@ process.on("message", async (message: GitExecutorMessageDescriptor) => {
     //#region initialization
     case 'init':
       init(message.args[0] as string).then(() => sendSuccessResult(message.requestID, null)).catch(err => sendFailedResult(message.requestID, err))
+      break;
+    //#endregion
+    //#region status
+    case 'getStatus':
+      getStatus(message.args[0] as string).then((result) => sendSuccessResult(message.requestID, result)).catch(err => sendFailedResult(message.requestID, err))
+      break;
+    //#endregion
+    //#region branches
+    case 'getBranches':
+      getBranches(message.args[0] as string).then((result) => sendSuccessResult(message.requestID, result)).catch(err => sendFailedResult(message.requestID, err))
+      break;
+    //#endregion
+    //#region tags
+    case 'getTags':
+      getTags(message.args[0] as string).then((result) => sendSuccessResult(message.requestID, result)).catch(err => sendFailedResult(message.requestID, err))
+      break
+    //#endregion
+    //#region submodules
+    case 'getSubModules':
+      getSubModules(message.args[0] as string).then((result) => sendSuccessResult(message.requestID, result)).catch(err => sendFailedResult(message.requestID, err))
+      break;
     //#endregion
     default:
       break;

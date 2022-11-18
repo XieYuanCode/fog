@@ -1,5 +1,7 @@
+import type { BranchSummary, StatusResult, TagResult } from "simple-git";
 import { GitRepository } from "../GitRepository";
 import { ILocalRepoGroupViewModel } from "../ILocalRepoGroupViewModel";
+import { GitSubmodule } from "../submodule";
 
 export interface ILocalRepositoryStoreState {
   localRepositories: Array<GitRepository>
@@ -19,4 +21,8 @@ export interface ILocalRepositoryStoreAction {
   addAttachedGroup: (explorer_location: string, attachDirectory: string, name: string) => void
   pinRepo: (repoID: string) => void
   unPinRepo: (repoID: string) => void
+  updateRepoBranches: (repoID: string, branches: BranchSummary) => void
+  updateRepoStatus: (repoID: string, status: StatusResult) => void
+  updateRepoTags: (repoID: string, tags: TagResult) => void
+  updateRepoSubmodules: (repoID: string, submodulesString: string) => void
 }

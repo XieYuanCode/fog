@@ -1,4 +1,5 @@
-export type gitExecutorAction = 'getBranches' |
+export type gitExecutorAction =
+  'getBranches' |
   'getLocalBranches' |
   'deleteLocalBranch' |
   'deleteLocalBranches' |
@@ -7,5 +8,8 @@ export type gitExecutorAction = 'getBranches' |
   'getGitVersion' |
   'setGlobalUsername' |
   'setGlobalEmailAddress' |
-  'checkIsRepo'|
-  'init'
+  'checkIsRepo' |
+  'init' |
+  'getStatus' |
+  'getTags'|
+  'getSubModules'

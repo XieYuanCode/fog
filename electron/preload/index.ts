@@ -33,7 +33,8 @@ contextBridge.exposeInMainWorld('git_bridge', {
   //#endregion
   //#region Integration
   importLocalGitRepo: () => ipcRenderer.invoke("Git:Integration:ImportLocalGitRepo"),
-  attachFolder: () => ipcRenderer.invoke("Git:Integration:AttachFolder")
+  attachFolder: () => ipcRenderer.invoke("Git:Integration:AttachFolder"),
+  getRepoGitInfo: (location: string) => ipcRenderer.invoke("Git:Integration:GetRepoBasicGitInfo", [location])
   //#endregion
 })
 
