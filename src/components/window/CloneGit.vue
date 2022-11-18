@@ -32,13 +32,15 @@
               <ElCol :span="11">
                 <div class="flex justify-start items-center">
                   <ElCheckbox v-model="depth">Depth</ElCheckbox>
-                  <ElInput placeholder="depth" :disabled="!depth" v-model="cloneOptions.depth" class="ml-2"></ElInput>
+                  <ElInputNumber placeholder="depth" ref="depthInput" :disabled="!depth" v-model="cloneOptions.depth"
+                    class="ml-2" :min="0" :controls="false"></ElInputNumber>
                 </div>
               </ElCol>
               <ElCol :span="11" :offset="2">
                 <div class="flex justify-start items-center">
                   <ElCheckbox v-model="branch">Branch</ElCheckbox>
-                  <ElInput placeholder="branch" :disabled="!branch" v-model="cloneOptions.branch" class="ml-2">
+                  <ElInput placeholder="branch" ref="branchInput" :disabled="!branch" v-model="cloneOptions.branch"
+                    class="ml-2">
                   </ElInput>
                 </div>
               </ElCol>
@@ -55,7 +57,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref } from "vue";
+import { computed, onMounted, reactive, ref, watch } from "vue";
 import CloneIcon from "../../assets/clone-icon.png"
 import { Lock, User, Location } from '@element-plus/icons-vue'
 import { usePreferenceStore } from "../../store/preference"
@@ -67,12 +69,19 @@ const cloneOptions = reactive({
   remoteURL: "",
   bare: false,
   recurseSubmodules: false,
-  depth: "",
+  depth: 0,
   branch: ""
 })
 
 const depth = ref(false)
 const branch = ref(false)
+
+const depthInput = ref()
+const branchInput = ref()
+
+watch(depth, (newValue) => newValue === true && depthInput.value.focus())
+
+watch(branch, (newValue) => newValue === true && branchInput.value.focus())
 
 const remoteURLRegex = /(?:git|ssh|https?|git@[-\w.]+):(\/\/)?(.*?)(\.git)(\/?|\#[-\d\w._]+?)$/;
 
