@@ -28,6 +28,7 @@ body,
   --el-bg-color: rgba(255, 255, 255, 0);
   --el-bg-color-1: rgba(255, 255, 255, 0.4);
   --el-bg-color-2: rgba(255, 255, 255, 0.8);
+  --el-border-color: #949494;
 }
 
 html.dark:root {
@@ -47,6 +48,10 @@ html.dark:root {
 
 .light-color-text {
   opacity: 0.4;
+}
+
+.task-drawer {
+  background-color: var(--el-bg-color-1);
 }
 
 .fade-forward-enter-active,

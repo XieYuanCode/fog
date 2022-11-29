@@ -78,7 +78,7 @@ class WindowManager {
 
     this._preventWindowClose(this.mainWindow)
 
-    // this.mainWindow.webContents.openDevTools()
+    this.mainWindow.webContents.openDevTools()
 
     return this.mainWindow;
   }

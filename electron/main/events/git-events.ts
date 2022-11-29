@@ -218,5 +218,33 @@ const initGitEvents = () => {
       throw error
     }
   })
+
+  ipcMain.handle("Git:Integration:Clone", async (_, requestID: string, remoteURL: string, localAddress: string, bare: boolean = false, recurseSubmodules: boolean = false, depth?: number, branch?: string,) => {
+    return new Promise((resolve, reject) => {
+      git_child_process.send(new GitExecutorMessageDescriptor(requestID, 'clone', [remoteURL, localAddress, bare, recurseSubmodules, depth, branch]))
+
+      git_child_process.on('message', (message: GitExecuteResult) => {
+        if (message.error) {
+          resolve({
+            type: "failed",
+            error: message.error
+          })
+        }
+        if (message.type === 'result') {
+          resolve({
+            type: "success"
+          })
+        } else {
+          const targetWindow = windowManager.currentActiveWindow || windowManager.mainWindow;
+
+          targetWindow.webContents.send("MessageFromMain:Git:Clone:Process", {
+            requestID,
+            stage: message.result.stage,
+            progress: message.result.progress
+          })
+        }
+      })
+    })
+  })
 }
 export default initGitEvents;

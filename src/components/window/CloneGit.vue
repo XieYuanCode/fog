@@ -7,14 +7,15 @@
         <img :src="CloneIcon" width="100" class="git-clone-window-header-image mr-10" />
         <span class="git-clone-window-header-text extra-large-text ">Clone Git Repository</span>
       </ElHeader>
-      <hr class="hr w-full opacity-40" />
+      <ElProgress :show-text="false" :percentage="cloneProgress" :stroke-width="1" class="clone-progress w-full">
+      </ElProgress>
       <ElMain class="w-full py-5 px-0">
         <ElForm :model="cloneOptions" size="small" label-width="auto" label-position="right" :rules="rules">
           <ElFormItem label="Remote Url" prop="remoteURL">
             <ElInput size="small" v-model="cloneOptions.remoteURL" :prefix-icon="Location" />
           </ElFormItem>
           <ElFormItem label="Destination Directory">
-            <ElInput size="small" v-model="localAddress" :prefix-icon="Location" />
+            <ElInput size="small" v-model="cloneOptions.localAddress" :prefix-icon="Location" />
           </ElFormItem>
           <ElFormItem label="Additional Options">
             <ElRow>
@@ -48,39 +49,49 @@
           </ElFormItem>
         </ElForm>
       </ElMain>
-      <ElFooter height="20px" class="flex justify-end w-full flex-row items-end p-0">
-        <ElButton size="small" round>Cancel</ElButton>
-        <ElButton size="small" type="primary" round>Clone</ElButton>
+      <ElFooter height="20px" class="flex justify-between w-full flex-row items-center p-0">
+        <ElButton :icon="QuestionFilled" circle size="small" @click="getCloneHelp"></ElButton>
+        <span class="extra-small-text light-color-text w-3/5">{{ cloneProgressText }}</span>
+        <div>
+          <ElButton size="small" round @click="cancel">{{ !cloneStatus ? `Cancel` : `Run In Back` }}</ElButton>
+          <ElButton size="small" type="primary" round @click="clone" :disabled="cloneStatus" :loading="cloneStatus">
+            {{ !cloneStatus ? `Clone` : `Cloning...` }}</ElButton>
+        </div>
       </ElFooter>
     </ElContainer>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref, watch } from "vue";
+import { onMounted, reactive, ref, watch } from "vue";
 import CloneIcon from "../../assets/clone-icon.png"
-import { Lock, User, Location } from '@element-plus/icons-vue'
+import { Location, QuestionFilled } from '@element-plus/icons-vue'
 import { usePreferenceStore } from "../../store/preference"
 import type { FormRules } from "element-plus";
+import { uuid } from "../../utils/common";
 
 const preferenceStore = usePreferenceStore()
 
 const cloneOptions = reactive({
-  remoteURL: "",
+  remoteURL: "http://192.168.180.113/ast/awpjssdk.git",
+  localAddress: "/Users/xieyuan/Unclutter/FileStorage/Unclutter Files/git/awpjssdk",
   bare: false,
   recurseSubmodules: false,
   depth: 0,
   branch: ""
 })
 
+const cloneProgress = ref(0);
+
+const cancel = () => window_bridge.closeGitCloneWindow()
+
+const getCloneHelp = () => common_bridge.openExternal("https://www.git-scm.com/docs/git-clone/en")
+
 const depth = ref(false)
 const branch = ref(false)
-
 const depthInput = ref()
 const branchInput = ref()
-
 watch(depth, (newValue) => newValue === true && depthInput.value.focus())
-
 watch(branch, (newValue) => newValue === true && branchInput.value.focus())
 
 const remoteURLRegex = /(?:git|ssh|https?|git@[-\w.]+):(\/\/)?(.*?)(\.git)(\/?|\#[-\d\w._]+?)$/;
@@ -89,24 +100,42 @@ const rules = reactive<FormRules>({
   remoteURL: [{
     validator: (rule: any, value: any, callback: any) => {
       if (!remoteURLRegex.test(value)) {
-        console.log(123);
         callback(new Error("Not A Valid Git Clone Remote Url!"))
       }
     },
     trigger: 'change'
-  }, {
-    required: true, message: 'Remote Url Is Required!'
   }]
 })
 
-const localAddress = computed(() => {
-  return preferenceStore.defaultCloneUrl + "/" + cloneOptions.remoteURL
+const cloneStatus = ref(false)
+const cloneProgressText = ref(``)
+
+watch(() => cloneOptions.remoteURL, (newRemoteURL) => {
+  const repoName = newRemoteURL.split("/")[newRemoteURL.split("/").length - 1].replace(".git", "");
+  cloneOptions.localAddress = preferenceStore.defaultCloneUrl + "/" + repoName;
 })
 
 const isGitUrl = (url: string) => {
   if (!url) return
   return remoteURLRegex.test(url)
 }
+
+const clone = async () => {
+  cloneStatus.value = true;
+  git_bridge.clone(uuid(), cloneOptions.remoteURL, cloneOptions.localAddress, cloneOptions.bare, cloneOptions.recurseSubmodules, cloneOptions.depth, cloneOptions.branch, (stage: string, progress: number) => {
+    cloneProgress.value = progress;
+    cloneProgressText.value = `Cloning into '${cloneOptions.remoteURL.split("/")[cloneOptions.remoteURL.split("/").length - 1].replace(".git", "")}', Stage: ${stage},  Progress: ${progress}%`
+  }).then(cloneResult=> {
+    if (cloneResult.type === "failed") {
+      // Clone Success
+      cloneProgressText.value = `Clone Failed! ${cloneResult.error}`
+    } else if (cloneResult.type === "success") {
+      cancel()
+    }
+    cloneStatus.value = false;
+  })
+}
+
 onMounted(() => {
   common_bridge.readClipboard().then((text: string) => {
     if (!text) return

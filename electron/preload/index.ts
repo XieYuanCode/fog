@@ -37,7 +37,14 @@ contextBridge.exposeInMainWorld('git_bridge', {
   importLocalGitRepo: () => ipcRenderer.invoke("Git:Integration:ImportLocalGitRepo"),
   createLocalGitRepo: () => ipcRenderer.invoke("Git:Integration:CreateLocalGitRepo"),
   attachFolder: () => ipcRenderer.invoke("Git:Integration:AttachFolder"),
-  getRepoGitInfo: (location: string) => ipcRenderer.invoke("Git:Integration:GetRepoBasicGitInfo", [location])
+  getRepoGitInfo: (location: string) => ipcRenderer.invoke("Git:Integration:GetRepoBasicGitInfo", [location]),
+  clone: (requestID: string, remoteURL: string, localAddress: string, bare: boolean = false, recurseSubmodules: boolean = false, depth?: number, branch?: string, progressCallback?: (stage: string, progress: number) => void) => {
+    ipcRenderer.on('MessageFromMain:Git:Clone:Process', (_, callbackArg: { requestID: string, stage: string, progress: number }) => {
+      callbackArg.requestID === requestID && progressCallback.call(null, callbackArg.stage, callbackArg.progress)
+    })
+
+    return ipcRenderer.invoke("Git:Integration:Clone", requestID, remoteURL, localAddress, bare, recurseSubmodules, depth, branch)
+  }
   //#endregion
 })
 

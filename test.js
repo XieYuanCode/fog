@@ -1,17 +1,16 @@
-const { simpleGit } = require("simple-git")
+const { simpleGit } = require("simple-git");
 
-const gitRepo = simpleGit("/Users/xieyuan/code/fog")
+const progress = (arg) => {
+  console.log(arg);
+}
 
-const tasks = [
-  gitRepo.status(),
-  gitRepo.branch(),
-  // gitRepo.tag(),
-  // gitRepo.subModule()
-];
+const gitRepo = simpleGit({ progress });
 
-(async () => {
-  console.time("test")
-  const result = await Promise.all(tasks)
+const remoteURL = "http://192.168.180.113/ast/awpjssdk.git"
+const localPath = "/Users/xieyuan/Unclutter/FileStorage/Unclutter Files/git/awpjssdk"
+
+gitRepo.clone(remoteURL, localPath, { "--depth": 3 }).then(result => {
   console.log(result);
-  console.timeEnd("test");
-})()
+}).catch(err => {
+  console.error(err);
+})

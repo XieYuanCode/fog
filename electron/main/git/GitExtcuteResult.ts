@@ -3,6 +3,7 @@ export class GitExecuteResult {
     public readonly isSuccess: boolean,
     public readonly requestID: string,
     public readonly result?: any,
-    public readonly error?: Error
+    public readonly error?: Error,
+    public readonly type: 'result' | 'event' = 'result'
   ){}
 }

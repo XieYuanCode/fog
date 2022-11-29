@@ -35,12 +35,28 @@
         </div>
       </ElAside>
       <ElContainer class="home-main-container">
-        <ElHeader height="45px" class="home-toolbox w-full ">ElHeader</ElHeader>
+        <ElHeader height="45px" class="home-toolbox w-full p-0">
+          <Toolbox class="toolbox w-full h-full" @open-task-drawer="openTaskDrawer"></Toolbox>
+        </ElHeader>
         <ElMain class="home-main w-full h-full p-0">
           <ElProgress :percentage="0" :stroke-width="1" :show-text="false"></ElProgress>
         </ElMain>
       </ElContainer>
     </ElContainer>
+    <ElDrawer v-model="taskDrawer" direction="rtl" custom-class="task-drawer" size="20%" :modal="false"
+      :show-close="false">
+      <template #header>
+        <h4>set title by slot</h4>
+      </template>
+      <template #default>
+        This is Content
+      </template>
+      <template #footer>
+        <div style="flex: auto">
+          <el-button type="primary" @click="taskDrawer = false">close</el-button>
+        </div>
+      </template>
+    </ElDrawer>
   </div>
 </template>
 
@@ -52,6 +68,7 @@ import { Monitor, MostlyCloudy, Setting, Plus } from "@element-plus/icons-vue";
 import { useI18n } from "vue-i18n";
 import contextMenuCallbackEventListener from "../../utils/contextMenuCallback"
 import { useLocalRepositoryStore } from "../../store/localRepository"
+import Toolbox from "../Toolbox.vue"
 
 const localRepositoryStore = useLocalRepositoryStore()
 
@@ -60,6 +77,12 @@ const { t } = useI18n()
 const currentSelectExplorerType = ref("LocalRepos")
 
 const fadeDirection = ref("fade-forward")
+const taskDrawer = ref(false)
+
+const openTaskDrawer = () => {
+  console.log(123123123);
+  taskDrawer.value = true
+}
 
 const addLocalReposButtonContextMenuTemplate = [
   {
@@ -174,10 +197,9 @@ const createNewGitRepo = () => {
   })
 }
 
-const cloneGitRepo = () => { 
+const cloneGitRepo = () => {
   window_bridge.openGitCloneWindow()
 }
-
 
 onMounted(() => {
   contextMenuCallbackEventListener.addEventListener("local-repo-explorer-add-group", addGroupToLocalRepoExplorer)
@@ -190,7 +212,7 @@ onMounted(() => {
 
 <style scoped>
 .home-main-container {
-  background-color: var(--el-bg-color-2);
+  background-color: var(--el-bg-color-1);
 }
 
 .home-aside {

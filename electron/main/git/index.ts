@@ -2,7 +2,7 @@ import { GitExecutorMessageDescriptor } from "./GitExecutorMessageDescriptor";
 import { getGitVersion, getGlobalEmailAddress, getGlobalUsername, setGlobalEmailAddress, setGlobalUsername } from "./config"
 import { GitExecuteResult } from "./GitExtcuteResult";
 import { checkIsRepo } from "./common";
-import { init } from "./initialization";
+import { init, clone } from "./initialization";
 import { getStatus } from "./status";
 import { getBranches } from "./branch";
 import { getTags } from "./tag";
@@ -44,6 +44,12 @@ process.on("message", async (message: GitExecutorMessageDescriptor) => {
     //#region initialization
     case 'init':
       init(message.args[0] as string).then(() => sendSuccessResult(message.requestID, null)).catch(err => sendFailedResult(message.requestID, err))
+      break;
+    case 'clone':
+      clone(message.args[0] as string, message.args[1] as string, message.args[2] as boolean, message.args[3] as boolean, message.args[4] as number, message.args[5] as string, (stage, progress) => {
+        process.send(new GitExecuteResult(true, message.requestID, { stage, progress }, null, 'event'))
+      })
+        .then(() => sendSuccessResult(message.requestID, null)).catch(err => sendFailedResult(message.requestID, err))
       break;
     //#endregion
     //#region status

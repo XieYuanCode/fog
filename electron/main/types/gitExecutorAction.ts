@@ -12,4 +12,5 @@ export type gitExecutorAction =
   'init' |
   'getStatus' |
   'getTags'|
-  'getSubModules'
+  'getSubModules' |
+  'clone'
