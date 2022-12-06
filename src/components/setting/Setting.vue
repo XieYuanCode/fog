@@ -39,7 +39,7 @@
             <ElIcon class="mr-1" color="#E6A23C">
               <Warning />
             </ElIcon>
-            Chinese are not supported in the beta version yet
+            Language modification are not supported in the beta version yet.
           </span>
           <div class="divider-content flex justify-around items-center w-full">
             <ElDivider :style="{ width: '43%' }"></ElDivider>

@@ -49,6 +49,10 @@ class WindowManager {
     })
   }
 
+  public manageMainWindowState() {
+    if (!this.mainWindow) return
+    this._mainWindowState.manage(this.mainWindow)
+  }
   /**
    * 创建主窗口
    */
@@ -68,17 +72,15 @@ class WindowManager {
       ...this._basicWindowOption
     })
 
-    this._mainWindowState.manage(this.mainWindow);
-
     if (app.isPackaged) {
       this.mainWindow.loadFile(this._baseIndexHtmlAddress)
     } else {
       this.mainWindow.loadURL(this._baseDevelopUrl)
     }
 
-    this._preventWindowClose(this.mainWindow)
+    // this._preventWindowClose(this.mainWindow)
 
-    this.mainWindow.webContents.openDevTools()
+    // this.mainWindow.webContents.openDevTools()
 
     return this.mainWindow;
   }
@@ -115,7 +117,7 @@ class WindowManager {
 
     this.addServiceAccountWindow = new BrowserWindow({
       width: 640,
-      height: 480,
+      height: 250,
       movable: true,
       resizable: false,
       ...this._basicWindowOption

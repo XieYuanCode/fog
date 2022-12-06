@@ -1,4 +1,5 @@
 import initCommonEvents from "./common-events";
+import initDataBaseEvents from "./database-events";
 import initElectronStoreEvents from "./electron-store-events";
 import initGitEvents from "./git-events";
 import initWindowEvents from "./window-events"
@@ -8,6 +9,7 @@ const initAllEvents = () => {
   initElectronStoreEvents()
   initCommonEvents()
   initGitEvents()
+  initDataBaseEvents()
 }
 
 export default initAllEvents;

@@ -58,3 +58,8 @@ contextBridge.exposeInMainWorld("common_bridge", {
   setOpenOnLogin: (openOnLogin: boolean) => ipcRenderer.send("Common:SetOpenOnLogin", openOnLogin),
   readClipboard: () => ipcRenderer.invoke("Common:ReadClipboard")
 })
+
+contextBridge.exposeInMainWorld("db_bridge", {
+  addServiceAccount: (serviceAccount) => ipcRenderer.send("Database:ServiceAccount:AddServiceAccount", serviceAccount),
+  deleteServiceAccount: (id: string) => ipcRenderer.send("Database:ServiceAccount:DeleteServiceAccount", id)
+})

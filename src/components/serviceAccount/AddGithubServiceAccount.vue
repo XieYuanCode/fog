@@ -17,6 +17,10 @@ import { FogUserInfo } from "../../types/IUserInfo";
 import { reactive } from "vue";
 import githubAxiosInstanceFactory, { IGitHubUserInfo } from "../../message/Github"
 import { Lock, User } from '@element-plus/icons-vue'
+import { IServiceAccount } from "../../types/IServiceAccount";
+import { ElForm, ElFormItem, ElInput } from "element-plus";
+import { ServiceAccountType } from "../../types/ServiceAccountType";
+import { ServiceAccountAuthenticationType } from "../../types/ServiceAccountAuthenticationType";
 
 
 const githubInfo = reactive({
@@ -29,9 +33,17 @@ const githubInfo = reactive({
 const addAccount = async () => {
   const axiosInstance = githubAxiosInstanceFactory.getInstance(githubInfo.name, githubInfo.pat)
 
-  const user = await axiosInstance.listCurrentUser() as FogUserInfo<IGitHubUserInfo>
+  const userInfo = await axiosInstance.listCurrentUser() as FogUserInfo<IGitHubUserInfo>
+  const serviceAccount: IServiceAccount = {
+    uuid: userInfo.id,
+    accountType: ServiceAccountType.Github,
+    authType: ServiceAccountAuthenticationType.PersonalAccessToken,
+    token: githubInfo.pat,
+    userInfo: userInfo,
+    isAvailable: false
+  }
 
-  console.log('github', user);
+  return serviceAccount
 }
 
 defineExpose({ addAccount })

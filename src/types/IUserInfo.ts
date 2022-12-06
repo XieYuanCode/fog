@@ -2,7 +2,7 @@ export class FogUserInfo<T = unknown> {
   /**
    * id
    */
-  id: number
+  id: string
   /**
    * name
    */

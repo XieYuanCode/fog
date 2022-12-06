@@ -50,6 +50,7 @@
     "mousetrap": "^1.6.5",
     "pinia": "^2.0.23",
     "simple-git": "^3.14.1",
+    "sqlite3": "^5.1.2",
     "toad-scheduler": "^2.0.0",
     "vue-i18n": "9",
     "vue-router": "4"

@@ -17,11 +17,11 @@
               </ElFormItem>
               <ElFormItem :label="$t('welcome.general.color_theme_label')">
                 <ElRadioGroup size="small" v-model="appearanceStore.theme" @change="themeChanged">
-                  <ElRadioButton label="Light" disabled>{{ $t('welcome.general.color_theme_light') }}</ElRadioButton>
-                  <ElRadioButton label="Dark" disabled>{{ $t('welcome.general.color_theme_dark') }}</ElRadioButton>
+                  <ElRadioButton label="Light">{{ $t('welcome.general.color_theme_light') }}</ElRadioButton>
+                  <ElRadioButton label="Dark">{{ $t('welcome.general.color_theme_dark') }}</ElRadioButton>
                   <ElRadioButton label="System">{{ $t('welcome.general.color_theme_system') }}</ElRadioButton>
                 </ElRadioGroup>
-                <ElLink class="system-theme-link ml-5" @click="openSystemColorTheme">System Color Theme</ElLink>
+                <ElLink class="system-theme-link ml-5 extra-small-text opacity-70" @click="openSystemColorTheme">System Color Theme</ElLink>
               </ElFormItem>
               <ElFormItem :label="$t('welcome.general.language_label')">
                 <ElRadioGroup size="small" v-model="preferenceStore.language" @change="languageChanged">
@@ -56,6 +56,8 @@
               <AddServiceAccountCard v-for="card in availableServiceAccountType" :info="card"
                 @click="addServiceAccount">
               </AddServiceAccountCard>
+              <ElDivider></ElDivider>
+              <ElCard v-for="serviceAccount in serviceAccounts.accounts">{{serviceAccount.userInfo.name}}</ElCard>
             </div>
           </div>
         </Transition>
@@ -68,14 +70,17 @@
         <Transition :name="fadeDirection">
           <span class="light-color-text extra-small-text absolute bottom-5" :style="{ right: '366px' }"
             v-if="currentStep === 1">
-            Theme and Chinese are not supported in the beta version yet, please modify the system color theme
+            <ElIcon class="mr-1" color="#E6A23C">
+              <Warning />
+            </ElIcon>
+            Language modification are not supported in the beta version yet.
           </span>
         </Transition>
       </div>
       <div class="welcome-view-right-container w-2/6 h-full" :style="{
         boxShadow: `var(--el-box-shadow-dark)`,
       }">
-        <ElCarousel class="welcome-carousel w-full h-full" :initial-index="1" :autoplay="false" arrow="never"
+        <ElCarousel class="welcome-carousel w-full h-full" :initial-index="0" :autoplay="false" arrow="never"
           indicator-position="none" ref="carouselElement" :loop="false">
           <ElCarouselItem v-for="image in carouselImages" class="welcome-carousel-item h-full">
             <img :src="image" class="welcome-carousel-image w-full h-full object-cover" />
@@ -110,7 +115,9 @@ import { ThemeType } from "../../types/theme"
 import { getAvailableServiceAccountTypes } from "../../utils/serviceAccount"
 import AddServiceAccountCard from "../common/serviceAccount/AddServiceAccountCard.vue"
 import { ArrowLeft, ArrowRight, User, Message, Warning } from '@element-plus/icons-vue'
+import { useServiceAccounts } from "../../store/serviceAccounts"
 
+const serviceAccounts = useServiceAccounts()
 const isLoadingGitGlobalUsername = ref(true)
 const isLoadingGitEmailAddress = ref(true)
 
@@ -193,6 +200,9 @@ const fadeDirection = ref("fade-forward")
 
 
 <style scoped>
+.welcome-view {
+  background-color: var(--el-bg-color-2);
+}
 .welcome-carousel-image {
   -webkit-user-drag: none;
 }

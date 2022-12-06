@@ -5,7 +5,9 @@
     <AddGitlabceeeServiceAccountVue v-if="type === ServiceAccountType.GitlabCEEE" ref="addServiceAccountFormRef">
     </AddGitlabceeeServiceAccountVue>
 
-    <span class="authentication-status absolute bottom-5 left-5">{{ authenticationStatus }}</span>
+    <span class="authentication-status absolute bottom-5 left-5 extra-small-text light-color-text">{{
+        authenticationStatus
+    }}</span>
     <ElButton class="absolute right-24 bottom-5 z-50" round plain size="small" @click="closeWindow">
       {{ $t("dialog.add_service_account.cancel_btn_text") }}
     </ElButton>
@@ -13,6 +15,7 @@
       :disabled="authenticationStatus === 'Authorizing...'">
       {{ $t("dialog.add_service_account.confirm_btn_text") }}
     </ElButton>
+    <button @click="remove">remove</button>
   </div>
 </template>
 
@@ -23,10 +26,12 @@ import AddGithubServiceAccountVue from './AddGithubServiceAccount.vue';
 import AddGitlabceeeServiceAccountVue from './AddGitlabceeeServiceAccount.vue';
 import { ref } from 'vue';
 import type { AxiosError } from 'axios';
+import { useServiceAccounts } from '../../store/serviceAccounts';
 
 const router = useRouter();
 const { type } = router.currentRoute.value.params;
 const addServiceAccountFormRef = ref<any>(null)
+const serviceAccounts = useServiceAccounts()
 
 const authenticationStatus = ref("")
 
@@ -34,11 +39,16 @@ const closeWindow = () => {
   window_bridge.closeAddServiceAccountWindow();
 }
 
+const remove = () => {
+  serviceAccounts.deleteServiceAccount("ccf1cb88-6b61-48b3-96de-371b6e665c15")
+}
+
 const addAccount = async () => {
   authenticationStatus.value = "Authorizing..."
 
   try {
-    await addServiceAccountFormRef.value.addAccount();
+    const user = await addServiceAccountFormRef.value.addAccount();
+    serviceAccounts.addServiceAccount(user)
     authenticationStatus.value = "Authorization Succeeded"
     closeWindow()
   } catch (error) {
@@ -49,10 +59,6 @@ const addAccount = async () => {
 
 <style scoped>
 .add-service-account-window {
-  background-color: var(--color-bg-2);
-}
-
-.authentication-status {
-  color: var(--color-text-2);
+  background-color: var(--el-bg-color-2);
 }
 </style>
