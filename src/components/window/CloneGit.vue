@@ -73,8 +73,8 @@ import { uuid } from "../../utils/common";
 const preferenceStore = usePreferenceStore()
 
 const cloneOptions = reactive({
-  remoteURL: "http://192.168.180.113/ast/awpjssdk.git",
-  localAddress: "/Users/xieyuan/Unclutter/FileStorage/Unclutter Files/git/awpjssdk",
+  remoteURL: "",
+  localAddress: "",
   bare: false,
   recurseSubmodules: false,
   depth: 0,

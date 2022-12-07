@@ -80,7 +80,7 @@ class WindowManager {
 
     // this._preventWindowClose(this.mainWindow)
 
-    // this.mainWindow.webContents.openDevTools()
+    this.mainWindow.webContents.openDevTools()
 
     return this.mainWindow;
   }
@@ -185,7 +185,7 @@ class WindowManager {
     this.cloneGitWindow.once('ready-to-show', () => this.cloneGitWindow.show())
     this.cloneGitWindow.on('close', () => this.cloneGitWindow = null)
 
-    this.cloneGitWindow.webContents.openDevTools()
+    // this.cloneGitWindow.webContents.openDevTools()
 
     return this.cloneGitWindow
   }

@@ -2,13 +2,16 @@
   <div class="toolbox flex items-center px-3 justify-between box-border">
     <div class="toolbox-pre-actions"></div>
     <div class="toolbox-suffix-actions">
-      <ElButton :icon="DArrowLeft" size="small" @click="emit('openTaskDrawer')"></ElButton>
+      <ELPopover placement="bottom" title="Title" :width="200" trigger="click"
+        content="this is content, this is content, this is content">
+        <ElButton :icon="Download" size="small"></ElButton>
+      </ELPopover>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { DArrowLeft } from "@element-plus/icons-vue"
+import { Download } from "@element-plus/icons-vue"
 
 const emit = defineEmits(['openTaskDrawer'])
 </script>

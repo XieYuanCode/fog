@@ -36,32 +36,18 @@
       </ElAside>
       <ElContainer class="home-main-container">
         <ElHeader height="45px" class="home-toolbox w-full p-0">
-          <Toolbox class="toolbox w-full h-full" @open-task-drawer="openTaskDrawer"></Toolbox>
+          <Toolbox class="toolbox w-full h-full"></Toolbox>
         </ElHeader>
         <ElMain class="home-main w-full h-full p-0">
           <ElProgress :percentage="0" :stroke-width="1" :show-text="false"></ElProgress>
         </ElMain>
       </ElContainer>
     </ElContainer>
-    <ElDrawer v-model="taskDrawer" direction="rtl" custom-class="task-drawer" size="20%" :modal="false"
-      :show-close="false">
-      <template #header>
-        <h4>set title by slot</h4>
-      </template>
-      <template #default>
-        This is Content
-      </template>
-      <template #footer>
-        <div style="flex: auto">
-          <el-button type="primary" @click="taskDrawer = false">close</el-button>
-        </div>
-      </template>
-    </ElDrawer>
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { onMounted, ref, Transition } from "vue";
 import LocalRepoExplorer from "../explorer/LocalRepoExplorer.vue"
 import ServiceAccountExplorer from "../explorer/ServiceAccountExplorer.vue"
 import { Monitor, MostlyCloudy, Setting, Plus } from "@element-plus/icons-vue";
@@ -69,6 +55,8 @@ import { useI18n } from "vue-i18n";
 import contextMenuCallbackEventListener from "../../utils/contextMenuCallback"
 import { useLocalRepositoryStore } from "../../store/localRepository"
 import Toolbox from "../Toolbox.vue"
+import { ElContainer, ElAside, ElRadioGroup, ElRadioButton, ElIcon, ElButton, ElHeader, ElMain, ElProgress } from "element-plus";
+import { ServiceAccountType } from "../../types/ServiceAccountType";
 
 const localRepositoryStore = useLocalRepositoryStore()
 
@@ -201,12 +189,17 @@ const cloneGitRepo = () => {
   window_bridge.openGitCloneWindow()
 }
 
+const addServiceAccountGithub = () => window_bridge.openAddServiceAccountWindow(ServiceAccountType.Github, "welcome");
+const addServiceAccountGitlabCeee = () => window_bridge.openAddServiceAccountWindow(ServiceAccountType.GitlabCEEE, "welcome");
+
 onMounted(() => {
   contextMenuCallbackEventListener.addEventListener("local-repo-explorer-add-group", addGroupToLocalRepoExplorer)
   contextMenuCallbackEventListener.addEventListener("local-repo-explorer-attach-local-directory", addAttachedGroupToLocalRepoExplorer)
   contextMenuCallbackEventListener.addEventListener("local-repo-explorer-add-repo", importNewGitRepo)
   contextMenuCallbackEventListener.addEventListener("local-repo-explorer-create-repo", createNewGitRepo)
   contextMenuCallbackEventListener.addEventListener("local-repo-explorer-clone-git-repo", cloneGitRepo)
+  contextMenuCallbackEventListener.addEventListener("add-service-account-github", addServiceAccountGithub)
+  contextMenuCallbackEventListener.addEventListener("add-service-account-gitlab-ceee", addServiceAccountGitlabCeee)
 })
 </script>
 
@@ -217,10 +210,15 @@ onMounted(() => {
 
 .home-aside {
   border-right: 1px solid var(--el-border-color);
+  box-shadow: var(--el-box-shadow-lighter);
   background-color: var(--el-bg-color-1);
 }
 
 .home-main {
   border-top: 1px solid var(--el-border-color);
+}
+
+.toolbox {
+  box-shadow: var(--el-box-shadow-lighter);
 }
 </style>

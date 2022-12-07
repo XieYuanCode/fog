@@ -5,7 +5,21 @@
       <div class="welcome-view-left-container w-4/6 h-full box-border p-10">
         <Transition :name="fadeDirection">
           <div v-if="currentStep === 0" key="description" class="welcome-description welcome-item-panel absolute">
-            <span class="extra-large-text">Welcome Page</span>
+            <section>
+              <div class="mx-auto max-w-screen-xl px-4 py-32 lg:flex lg:h-screen lg:items-center">
+                <div class="mx-auto max-w-xl text-center">
+                  <h1 class="text-3xl font-extrabold sm:text-5xl">
+                    Convenient Git Client
+                    <strong class="subtitle font-extrabold sm:block"> Reduce Development Costs. </strong>
+                  </h1>
+                  <p class="mt-4 sm:text-xl sm:leading-relaxed"> Lorem ipsum dolor sit amet consectetur, adipisicing
+                    elit. Nesciunt illo tenetur fuga ducimus numquam ea! </p>
+                  <div class="mt-8 flex flex-wrap justify-center gap-4">
+                    <ElButton size="large" type="primary" :icon="Right" @click="nextStep" round> Get Started</ElButton>
+                  </div>
+                </div>
+              </div>
+            </section>
           </div>
           <div v-else-if="currentStep === 1" key="General" class="welcome-general welcome-item-panel absolute">
             <span class="extra-large-text">{{ $t('welcome.general.general_setting_title') }}</span>
@@ -21,7 +35,8 @@
                   <ElRadioButton label="Dark">{{ $t('welcome.general.color_theme_dark') }}</ElRadioButton>
                   <ElRadioButton label="System">{{ $t('welcome.general.color_theme_system') }}</ElRadioButton>
                 </ElRadioGroup>
-                <ElLink class="system-theme-link ml-5 extra-small-text opacity-70" @click="openSystemColorTheme">System Color Theme</ElLink>
+                <ElLink class="system-theme-link ml-5 extra-small-text opacity-70" @click="openSystemColorTheme">System
+                  Color Theme</ElLink>
               </ElFormItem>
               <ElFormItem :label="$t('welcome.general.language_label')">
                 <ElRadioGroup size="small" v-model="preferenceStore.language" @change="languageChanged">
@@ -57,7 +72,7 @@
                 @click="addServiceAccount">
               </AddServiceAccountCard>
               <ElDivider></ElDivider>
-              <ElCard v-for="serviceAccount in serviceAccounts.accounts">{{serviceAccount.userInfo.name}}</ElCard>
+              <ElCard v-for="serviceAccount in serviceAccounts.accounts">{{ serviceAccount.userInfo.name }}</ElCard>
             </div>
           </div>
         </Transition>
@@ -114,7 +129,7 @@ import { ServiceAccountType } from "../../types/ServiceAccountType"
 import { ThemeType } from "../../types/theme"
 import { getAvailableServiceAccountTypes } from "../../utils/serviceAccount"
 import AddServiceAccountCard from "../common/serviceAccount/AddServiceAccountCard.vue"
-import { ArrowLeft, ArrowRight, User, Message, Warning } from '@element-plus/icons-vue'
+import { ArrowLeft, ArrowRight, User, Message, Warning, Right } from '@element-plus/icons-vue'
 import { useServiceAccounts } from "../../store/serviceAccounts"
 
 const serviceAccounts = useServiceAccounts()
@@ -148,10 +163,8 @@ onMounted(() => {
 })
 
 const addServiceAccount = async (type: ServiceAccountType) => {
-  console.log('addServiceAccount', type);
   window_bridge.openAddServiceAccountWindow(type, "welcome");
 }
-
 
 const appearanceStore = useAppearanceStore()
 const preferenceStore = usePreferenceStore()
@@ -203,11 +216,16 @@ const fadeDirection = ref("fade-forward")
 .welcome-view {
   background-color: var(--el-bg-color-2);
 }
+
 .welcome-carousel-image {
   -webkit-user-drag: none;
 }
 
 .welcome-item-panel {
   width: 575px;
+}
+
+.subtitle {
+  color: var(--el-color-primary);
 }
 </style>
