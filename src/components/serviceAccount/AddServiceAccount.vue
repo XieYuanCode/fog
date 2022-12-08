@@ -15,7 +15,6 @@
       :disabled="authenticationStatus === 'Authorizing...'">
       {{ $t("dialog.add_service_account.confirm_btn_text") }}
     </ElButton>
-    <button @click="remove">remove</button>
   </div>
 </template>
 
@@ -37,10 +36,6 @@ const authenticationStatus = ref("")
 
 const closeWindow = () => {
   window_bridge.closeAddServiceAccountWindow();
-}
-
-const remove = () => {
-  serviceAccounts.deleteServiceAccount("ccf1cb88-6b61-48b3-96de-371b6e665c15")
 }
 
 const addAccount = async () => {

@@ -109,7 +109,7 @@
     </ElButton>
     <ElButton class="welcome-next-button absolute right-5 bottom-5 z-50" round size="small" type="primary"
       @click="nextStep" :disabled="currentStep === 2 && !gitGlobalInformation.isInstalled">
-      Next
+      {{(currentStep === 0 ? 'Get Started': 'Next')}}
       <ElIcon class="el-icon--right">
         <ArrowRight />
       </ElIcon>
